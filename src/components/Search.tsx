@@ -21,8 +21,9 @@ export class Search extends Component<Props> {
 
   private handleInput(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target) {
+      const inputValue = e.target.value.replace(" ", "");
       this.setState((prevState) => {
-        return { ...prevState, inputValue: e.target.value };
+        return { ...prevState, inputValue };
       });
     }
   }

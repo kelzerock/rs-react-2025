@@ -5,4 +5,5 @@ export type StateAppComponent = {
   isLoading: boolean;
   inputSearch: string;
   isError: boolean;
+  responseStatus: number | null;
 };

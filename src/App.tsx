@@ -9,6 +9,7 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { CrashComponent } from "./components/CrashComponent";
 import { loadDataFromLocalStorage } from "./utils/loadDataFromLocalStorage";
 import { LocalStorageKey } from "./models/enums/localStorageKey";
+import { Footer } from "./components/Footer";
 
 class App extends Component<PropsAbsent, Readonly<StateAppComponent>> {
   state: Readonly<StateAppComponent>;
@@ -20,6 +21,7 @@ class App extends Component<PropsAbsent, Readonly<StateAppComponent>> {
       isLoading: true,
       inputSearch: "",
       isError: false,
+      responseStatus: null,
     };
     this.handleSearchInputChange = this.handleSearchInputChange.bind(this);
     this.requestToApi = this.requestToApi.bind(this);
@@ -31,7 +33,11 @@ class App extends Component<PropsAbsent, Readonly<StateAppComponent>> {
 
   async requestToApi(): Promise<void> {
     try {
+      this.setState({ responseStatus: null });
       const response = await requestAPI(this.state.inputSearch);
+      if (response.status >= 400) {
+        this.setState({ responseStatus: response.status });
+      }
       if (!response.ok) return;
 
       const data = await response.json();
@@ -42,7 +48,7 @@ class App extends Component<PropsAbsent, Readonly<StateAppComponent>> {
       }
     } catch (error) {
       console.error("Ошибка загрузки:", error);
-      this.setState({ isLoading: false });
+      this.setState({ characters: [], isLoading: false });
     }
   }
 
@@ -69,11 +75,12 @@ class App extends Component<PropsAbsent, Readonly<StateAppComponent>> {
   };
 
   render() {
-    const { characters, isLoading, isError, inputSearch } = this.state;
+    const { characters, isLoading, isError, inputSearch, responseStatus } =
+      this.state;
 
     return (
-      <div className="container mx-auto p-3">
-        <div className="bg-blue-100 rounded-2xl p-3 flex flex-col gap-2">
+      <div className="container mx-auto p-3 flex flex-col gap-3 h-full">
+        <div className="bg-blue-100 rounded-2xl p-3 flex flex-col gap-2 grow">
           <h1 className="p-4 text-4xl">StarTrek characters library:</h1>
           <ErrorBoundary>
             <Search
@@ -89,6 +96,11 @@ class App extends Component<PropsAbsent, Readonly<StateAppComponent>> {
             ) : (
               <p className="text-red-500">Nothing for view.</p>
             )}
+            {responseStatus !== null && (
+              <p className="text-red-600 text-sm font-medium mt-2">
+                Error connecting to API. Status code: {responseStatus}
+              </p>
+            )}
             <button
               className="p-2 bg-red-600 hover:bg-red-800 cursor-pointer text-white rounded-md font-semibold"
               onClick={this.onSimulateError}
@@ -97,6 +109,7 @@ class App extends Component<PropsAbsent, Readonly<StateAppComponent>> {
             </button>
           </ErrorBoundary>
         </div>
+        <Footer />
       </div>
     );
   }

@@ -49,9 +49,9 @@ export class Search extends Component<PropsSearchComponent> {
   render(): ReactNode {
     const { isLoading } = this.props;
     return (
-      <form className="flex gap-2" onSubmit={this.handleSubmit}>
+      <form className="flex gap-2 flex-wrap" onSubmit={this.handleSubmit}>
         <input
-          className="bg-gray-500 text-white text-2xl rounded-md p-2 disabled:bg-gray-300 disabled:text-gray-100 disabled:cursor-auto"
+          className="bg-gray-500 text-white text-2xl rounded-md p-2 disabled:bg-gray-300 disabled:text-gray-100 disabled:cursor-auto w-full sm:w-auto"
           type="text"
           value={this.state.inputValue}
           onChange={this.handleInput}
@@ -60,7 +60,7 @@ export class Search extends Component<PropsSearchComponent> {
         <button
           disabled={isLoading}
           type="submit"
-          className=" disabled:cursor-auto bg-emerald-500 text-white text-2xl py-2 px-4 rounded-2xl font-semibold hover:bg-emerald-600 cursor-pointer disabled:bg-gray-300 disabled:text-gray-100"
+          className=" w-full sm:w-auto disabled:cursor-auto bg-emerald-500 text-white text-2xl py-2 px-4 rounded-md font-semibold hover:bg-emerald-600 cursor-pointer disabled:bg-gray-300 disabled:text-gray-100"
         >
           Search by name
         </button>

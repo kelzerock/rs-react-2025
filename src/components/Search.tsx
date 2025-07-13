@@ -56,7 +56,7 @@ export class Search extends Component<Props> {
         />
         <button
           type="submit"
-          className="bg-emerald-500 text-white text-2xl p-2 rounded-2xl"
+          className="bg-emerald-500 text-white text-2xl p-2 rounded-2xl font-semibold hover:bg-emerald-700 cursor-pointer"
         >
           Search
         </button>

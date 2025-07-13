@@ -4,4 +4,5 @@ export type StateAppComponent = {
   characters: MainCharacter[];
   isLoading: boolean;
   inputSearch: string;
+  isError: boolean;
 };

@@ -7,6 +7,8 @@ import type { StateAppComponent } from "./models/types/stateAppComponent";
 import { requestAPI } from "./utils/requestAPI";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { CrashComponent } from "./components/CrashComponent";
+import { loadDataFromLocalStorage } from "./utils/loadDataFromLocalStorage";
+import { LocalStorageKey } from "./models/enums/localStorageKey";
 
 class App extends Component<PropsAbsent, Readonly<StateAppComponent>> {
   state: Readonly<StateAppComponent>;
@@ -45,11 +47,15 @@ class App extends Component<PropsAbsent, Readonly<StateAppComponent>> {
   }
 
   async componentDidMount(): Promise<void> {
+    const savedSearch = loadDataFromLocalStorage(LocalStorageKey.inputData);
+    const searchQuery = savedSearch ? String(savedSearch) : "";
+
+    await this.setState({ inputSearch: searchQuery });
     await this.requestToApi();
   }
 
   async componentDidUpdate(
-    prevProps: PropsAbsent,
+    _: PropsAbsent,
     prevState: StateAppComponent,
   ): Promise<void> {
     if (prevState.inputSearch !== this.state.inputSearch) {
@@ -63,14 +69,18 @@ class App extends Component<PropsAbsent, Readonly<StateAppComponent>> {
   };
 
   render() {
-    const { characters, isLoading, isError } = this.state;
+    const { characters, isLoading, isError, inputSearch } = this.state;
 
     return (
       <div className="container mx-auto p-3">
         <div className="bg-blue-100 rounded-2xl p-3 flex flex-col gap-2">
           <h1 className="p-4 text-4xl">StarTrek characters library:</h1>
-          <Search onInputChange={this.handleSearchInputChange} />
           <ErrorBoundary>
+            <Search
+              onInputChange={this.handleSearchInputChange}
+              isLoading={isLoading}
+              initialValue={inputSearch}
+            />
             {isError && <CrashComponent />}
             {isLoading ? (
               <p className="text-gray-500 text-xl">Loading data...</p>
@@ -79,13 +89,13 @@ class App extends Component<PropsAbsent, Readonly<StateAppComponent>> {
             ) : (
               <p className="text-red-500">Nothing for view.</p>
             )}
+            <button
+              className="p-2 bg-red-600 hover:bg-red-800 cursor-pointer text-white rounded-md font-semibold"
+              onClick={this.onSimulateError}
+            >
+              Emulate error!
+            </button>
           </ErrorBoundary>
-          <button
-            className="p-2 bg-red-600 hover:bg-red-800 cursor-pointer text-white rounded-md font-semibold"
-            onClick={this.onSimulateError}
-          >
-            Emulate error!
-          </button>
         </div>
       </div>
     );

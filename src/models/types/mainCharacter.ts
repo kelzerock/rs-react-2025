@@ -3,4 +3,5 @@ export type MainCharacter = {
   name: string;
   gender?: string;
   alternateReality?: boolean;
+  bloodType?: string;
 };

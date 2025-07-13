@@ -3,17 +3,19 @@ import { saveDataToLocalStorage } from "../utils/saveDataToLocalStorage";
 import { LocalStorageKey } from "../models/enums/localStorageKey";
 import { loadDataFromLocalStorage } from "../utils/loadDataFromLocalStorage";
 
-type Props = {
+type PropsSearchComponent = {
   onInputChange: (value: string) => void;
+  isLoading: boolean;
+  initialValue: string;
 };
 
-export class Search extends Component<Props> {
+export class Search extends Component<PropsSearchComponent> {
   state: Readonly<{ inputValue: string }>;
 
-  constructor(props: Props) {
+  constructor(props: PropsSearchComponent) {
     super(props);
     this.state = {
-      inputValue: "",
+      inputValue: props.initialValue,
     };
     this.handleInput = this.handleInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -30,7 +32,6 @@ export class Search extends Component<Props> {
 
   private handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log("submit");
     saveDataToLocalStorage(this.state.inputValue, LocalStorageKey.inputData);
     this.props.onInputChange(this.state.inputValue);
   }
@@ -46,19 +47,22 @@ export class Search extends Component<Props> {
   }
 
   render(): ReactNode {
+    const { isLoading } = this.props;
     return (
       <form className="flex gap-2" onSubmit={this.handleSubmit}>
         <input
-          className="bg-gray-300 rounded-md p-2"
+          className="bg-gray-500 text-white text-2xl rounded-md p-2 disabled:bg-gray-300 disabled:text-gray-100 disabled:cursor-auto"
           type="text"
           value={this.state.inputValue}
           onChange={this.handleInput}
+          disabled={isLoading}
         />
         <button
+          disabled={isLoading}
           type="submit"
-          className="bg-emerald-500 text-white text-2xl p-2 rounded-2xl font-semibold hover:bg-emerald-700 cursor-pointer"
+          className=" disabled:cursor-auto bg-emerald-500 text-white text-2xl py-2 px-4 rounded-2xl font-semibold hover:bg-emerald-600 cursor-pointer disabled:bg-gray-300 disabled:text-gray-100"
         >
-          Search
+          Search by name
         </button>
       </form>
     );

@@ -3,10 +3,14 @@ import { saveDataToLocalStorage } from "../utils/saveDataToLocalStorage";
 import { LocalStorageKey } from "../models/enums/localStorageKey";
 import { loadDataFromLocalStorage } from "../utils/loadDataFromLocalStorage";
 
-export class Search extends Component {
+type Props = {
+  onInputChange: (value: string) => void;
+};
+
+export class Search extends Component<Props> {
   state: Readonly<{ inputValue: string }>;
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       inputValue: "",
@@ -27,6 +31,7 @@ export class Search extends Component {
     e.preventDefault();
     console.log("submit");
     saveDataToLocalStorage(this.state.inputValue, LocalStorageKey.inputData);
+    this.props.onInputChange(this.state.inputValue);
   }
 
   componentDidMount(): void {

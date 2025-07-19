@@ -18,7 +18,14 @@ export class Character extends Component<{ data: MainCharacter }> {
           <div className="flex items-center gap-1">
             <span>Gender: </span>
             <span>
-              {gender ? gender : <CiNoWaitingSign className=" text-red-700" />}
+              {gender ? (
+                gender
+              ) : (
+                <CiNoWaitingSign
+                  className=" text-red-700"
+                  data-testid="gender-false"
+                />
+              )}
             </span>
           </div>
           <div className="flex items-center gap-1">
@@ -35,9 +42,15 @@ export class Character extends Component<{ data: MainCharacter }> {
             <span>Alternative reality:</span>
             <span>
               {alternateReality ? (
-                <FaPlusCircle className=" text-emerald-700" />
+                <FaPlusCircle
+                  className=" text-emerald-700"
+                  data-testid="info-alternateReality-true"
+                />
               ) : (
-                <FaMinusCircle className=" text-red-700" />
+                <FaMinusCircle
+                  className=" text-red-700"
+                  data-testid="info-alternateReality-false"
+                />
               )}
             </span>
           </div>

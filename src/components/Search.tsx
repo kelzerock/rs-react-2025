@@ -23,7 +23,7 @@ export class Search extends Component<PropsSearchComponent> {
 
   private handleInput(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target) {
-      const inputValue = e.target.value.replace(" ", "");
+      const inputValue = e.target.value.trim();
       this.setState((prevState) => {
         return { ...prevState, inputValue };
       });
@@ -32,8 +32,9 @@ export class Search extends Component<PropsSearchComponent> {
 
   private handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    saveDataToLocalStorage(this.state.inputValue, LocalStorageKey.inputData);
-    this.props.onInputChange(this.state.inputValue);
+    const value = this.state.inputValue.trim();
+    saveDataToLocalStorage(value, LocalStorageKey.inputData);
+    this.props.onInputChange(value);
   }
 
   componentDidMount(): void {

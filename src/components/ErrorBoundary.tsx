@@ -24,9 +24,13 @@ export class ErrorBoundary extends Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className="text-center text-red-500">
-          <h1>Something went wrong...</h1>
+        <div
+          className="text-center text-red-500"
+          data-testid="error-boundary-wrapper"
+        >
+          <h1 data-testid="error-boundary-title">Something went wrong...</h1>
           <button
+            data-testid="error-boundary-btn-back"
             onClick={() => window.location.reload()}
             className="mt-2 p-2 bg-blue-300 rounded cursor-pointer hover:bg-blue-500 border border-2 border-white text-white font-bold"
           >

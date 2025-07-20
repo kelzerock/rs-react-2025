@@ -90,7 +90,9 @@ class App extends Component<PropsAbsent, Readonly<StateAppComponent>> {
             />
             {isError && <CrashComponent />}
             {isLoading ? (
-              <p className="text-gray-500 text-xl">Loading data...</p>
+              <p className="text-gray-500 text-xl" aria-label="Loading data...">
+                Loading data...
+              </p>
             ) : (
               <ListOfCharacters list={characters} />
             )}

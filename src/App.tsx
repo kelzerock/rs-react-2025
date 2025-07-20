@@ -91,10 +91,8 @@ class App extends Component<PropsAbsent, Readonly<StateAppComponent>> {
             {isError && <CrashComponent />}
             {isLoading ? (
               <p className="text-gray-500 text-xl">Loading data...</p>
-            ) : characters.length > 0 ? (
-              <ListOfCharacters list={characters} />
             ) : (
-              <p className="text-red-500">Nothing for view.</p>
+              <ListOfCharacters list={characters} />
             )}
             {responseStatus !== null && (
               <p className="text-red-600 text-sm font-medium mt-2">

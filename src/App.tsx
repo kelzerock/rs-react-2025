@@ -94,7 +94,7 @@ class App extends Component<PropsAbsent, Readonly<StateAppComponent>> {
                 Loading data...
               </p>
             ) : (
-              <ListOfCharacters list={characters} />
+              <ListOfCharacters characters={characters} />
             )}
             {responseStatus !== null && (
               <p className="text-red-600 text-sm font-medium mt-2">

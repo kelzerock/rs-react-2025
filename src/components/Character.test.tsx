@@ -5,7 +5,7 @@ describe("Character component", () => {
   it("All props view correctly", () => {
     render(
       <Character
-        data={{
+        character={{
           uid: "1",
           name: "test",
           gender: "V",
@@ -25,7 +25,7 @@ describe("Character component", () => {
   it("correct view with only required props", () => {
     render(
       <Character
-        data={{
+        character={{
           uid: "1",
           name: "test",
         }}

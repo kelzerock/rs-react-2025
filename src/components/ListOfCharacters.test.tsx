@@ -3,12 +3,12 @@ import { ListOfCharacters } from "./ListOfCharacters";
 import type { MainCharacter } from "../models/types/mainCharacter";
 
 vi.mock("./Character", () => ({
-  Character: ({ data }: { data: MainCharacter }) => (
+  Character: ({ character }: { character: MainCharacter }) => (
     <li>
-      <div>{data.name}</div>
-      <div>{data.gender ?? "Unknown gender"}</div>
-      <div>{data.alternateReality ? "Alternate" : "Original"}</div>
-      <div>{data.bloodType ?? "Unknown blood type"}</div>
+      <div>{character.name}</div>
+      <div>{character.gender ?? "Unknown gender"}</div>
+      <div>{character.alternateReality ? "Alternate" : "Original"}</div>
+      <div>{character.bloodType ?? "Unknown blood type"}</div>
     </li>
   ),
 }));
@@ -31,13 +31,13 @@ const fullData: MainCharacter[] = [
 ];
 
 test("renders correct number of characters", () => {
-  render(<ListOfCharacters list={fullData} />);
+  render(<ListOfCharacters characters={fullData} />);
   const items = screen.getAllByRole("listitem");
   expect(items).toHaveLength(2);
 });
 
 test("renders all character fields correctly", () => {
-  render(<ListOfCharacters list={fullData} />);
+  render(<ListOfCharacters characters={fullData} />);
   expect(screen.getByText("Test 1")).toBeInTheDocument();
   expect(screen.getByText("Male")).toBeInTheDocument();
   expect(screen.getByText("Original")).toBeInTheDocument();
@@ -56,7 +56,7 @@ test("renders fallback values for missing optional fields", () => {
       name: "Test 3",
     },
   ];
-  render(<ListOfCharacters list={partial} />);
+  render(<ListOfCharacters characters={partial} />);
   expect(screen.getByText("Test 3")).toBeInTheDocument();
   expect(screen.getByText("Unknown gender")).toBeInTheDocument();
   expect(screen.getByText("Original")).toBeInTheDocument();
@@ -64,6 +64,6 @@ test("renders fallback values for missing optional fields", () => {
 });
 
 test("shows empty state message when list is empty", () => {
-  render(<ListOfCharacters list={[]} />);
+  render(<ListOfCharacters characters={[]} />);
   expect(screen.getByText(/characters are absent/i)).toBeInTheDocument();
 });

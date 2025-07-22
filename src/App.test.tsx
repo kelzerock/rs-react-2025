@@ -113,7 +113,7 @@ describe("API Error Handling", () => {
   test("handles API error response", async () => {
     render(<App />);
     await waitFor(() => {
-      expect(screen.getByText(/error connecting to api/i)).toBeInTheDocument();
+      expect(screen.getByTestId("error-message")).toBeInTheDocument();
       expect(screen.getByText(/status code: 500/i)).toBeInTheDocument();
     });
   });

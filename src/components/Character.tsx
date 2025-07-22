@@ -1,11 +1,20 @@
 import type { MainCharacter } from "../models/types/mainCharacter";
 import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 import { CiNoWaitingSign } from "react-icons/ci";
+import { useSearchParams } from "react-router";
 
 export const Character = ({ character }: { character: MainCharacter }) => {
-  const { name, gender, alternateReality, bloodType } = character;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { name, gender, alternateReality, bloodType, uid } = character;
+  console.log(searchParams.toString());
+  const updateQueryParams = (id: string) => {
+    setSearchParams({ details: id });
+  };
   return (
-    <li className=" rounded-md p-2 bg-cyan-50 flex flex-col gap-0.5">
+    <li
+      className=" rounded-md p-2 bg-cyan-50 flex flex-col gap-0.5"
+      onClick={() => updateQueryParams(uid)}
+    >
       <span>
         Name: <strong>{name}</strong>
       </span>

@@ -7,6 +7,8 @@ import { LocalStorageKey } from "../../models/enums/localStorageKey";
 import { Search } from "../../components/Search";
 import { CrashComponent } from "../../components/CrashComponent";
 import { ListOfCharacters } from "../../components/ListOfCharacters";
+import { CharacterInfo } from "../../components/CharacterInfo";
+import { Methods } from "../../models/enums/methods";
 
 export const HomePage = () => {
   const [state, setState] = useState<StateAppComponent>({
@@ -24,7 +26,11 @@ export const HomePage = () => {
   const requestToApi = async (search: string | null = null): Promise<void> => {
     try {
       setState({ ...state, responseStatus: null, isLoading: true });
-      const response = await requestAPI(search || state.inputSearch);
+      const response = await requestAPI({
+        body: { name: search || state.inputSearch },
+        method: Methods.POST,
+        path: "/search",
+      });
       if (response.status >= 400) {
         setState({ ...state, responseStatus: response.status });
       }
@@ -66,9 +72,9 @@ export const HomePage = () => {
           Loading data...
         </p>
       ) : (
-        <div className="flex">
+        <div className="flex gap-2 items-start">
           <ListOfCharacters characters={characters} />
-          <div className="flex-1/4"></div>
+          <CharacterInfo />
         </div>
       )}
       {responseStatus !== null && (

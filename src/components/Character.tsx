@@ -2,17 +2,29 @@ import type { MainCharacter } from "../models/types/mainCharacter";
 import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 import { CiNoWaitingSign } from "react-icons/ci";
 import { memo } from "react";
+import { Query } from "../models/enums/query";
 
 export const Character = memo(function Character({
   character,
   setSearchParams,
+  searchParams,
 }: {
   character: MainCharacter;
-  setSearchParams: (data: { [key: string]: string }) => void;
+  searchParams: URLSearchParams;
+  setSearchParams: (data: URLSearchParams) => void;
 }) {
   const { name, gender, alternateReality, bloodType, uid } = character;
   const updateQueryParams = (id: string) => {
-    setSearchParams({ details: id });
+    const page = searchParams.get(Query.PAGE);
+    const params = new URLSearchParams();
+
+    if (page) {
+      params.set(Query.PAGE, page);
+    }
+
+    params.set(Query.DETAILS, id);
+
+    setSearchParams(params);
   };
   return (
     <li

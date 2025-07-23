@@ -3,6 +3,7 @@ import { Methods } from "../models/enums/methods";
 import type { StateAppComponent } from "../models/types/stateAppComponent";
 import { isResponse } from "../utils/checkFn/isResponse";
 import { requestAPI } from "../utils/requestAPI";
+import { RequestQuery } from "../models/enums/requestQuery";
 
 export const PaginationSection = ({
   state,
@@ -23,11 +24,13 @@ export const PaginationSection = ({
         responseStatus: null,
         isLoading: true,
       }));
+      const queries = new URLSearchParams();
+      queries.set(RequestQuery.PAGE, String(page));
       const response = await requestAPI({
         body: { name: state.inputSearch },
         method: Methods.POST,
         path: "/search",
-        queries: { pageNumber: page },
+        queries,
       });
 
       if (response.status >= 400) {

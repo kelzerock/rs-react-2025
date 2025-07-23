@@ -9,16 +9,11 @@ export const ListOfCharacters = memo(function ListOfCharacters({
   characters: MainCharacter[];
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const cachedSetSearchParams = useCallback(
-    (data: { [key: string]: string }) => {
-      const newParams = new URLSearchParams(data);
-      setSearchParams(newParams);
-    },
-    [],
-  );
+  const cachedSetSearchParams = useCallback((data: URLSearchParams) => {
+    setSearchParams(data);
+  }, []);
 
   if (characters.length === 0) {
-    searchParams.has("title");
     return <h2>Characters are absent</h2>;
   }
 
@@ -29,6 +24,7 @@ export const ListOfCharacters = memo(function ListOfCharacters({
           character={character}
           key={character.uid}
           setSearchParams={cachedSetSearchParams}
+          searchParams={searchParams}
         />
       ))}
     </ul>

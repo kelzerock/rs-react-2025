@@ -10,6 +10,9 @@ import { ListOfCharacters } from "../../components/ListOfCharacters";
 import { CharacterInfo } from "../../components/CharacterInfo";
 import { Methods } from "../../models/enums/methods";
 import { PaginationSection } from "../../components/Pagination";
+import { useSearchParams } from "react-router";
+import { Query } from "../../models/enums/query";
+import { RequestQuery } from "../../models/enums/requestQuery";
 
 export const HomePage = () => {
   const [state, setState] = useState<StateAppComponent>({
@@ -20,6 +23,7 @@ export const HomePage = () => {
     responseStatus: null,
     page: null,
   });
+  const [searchParams] = useSearchParams();
 
   const renderCharacter = useMemo(() => state.characters, [state.characters]);
 
@@ -30,6 +34,13 @@ export const HomePage = () => {
   const requestToApi = useCallback(
     async (search: string | null = null): Promise<void> => {
       try {
+        const queries = new URLSearchParams();
+        const page = searchParams.get(Query.PAGE);
+
+        if (page) {
+          const correctPage = String(parseFloat(page) - 1);
+          queries.set(RequestQuery.PAGE, correctPage);
+        }
         setState((prev) => ({
           ...prev,
           responseStatus: null,
@@ -39,6 +50,7 @@ export const HomePage = () => {
           body: { name: search || state.inputSearch },
           method: Methods.POST,
           path: "/search",
+          queries,
         });
 
         if (response.status >= 400) {

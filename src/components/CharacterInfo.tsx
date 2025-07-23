@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router";
 import { requestAPI } from "../utils/requestAPI";
 import { Methods } from "../models/enums/methods";
 import { GridLoader } from "react-spinners";
+import { RequestQuery } from "../models/enums/requestQuery";
 
 export const CharacterInfo = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,9 +27,11 @@ export const CharacterInfo = () => {
     if (details) {
       setIsOpen(true);
       const startFetch = async () => {
+        const queries = new URLSearchParams();
+        queries.set(RequestQuery.ID, details);
         const response = await requestAPI({
           method: Methods.GET,
-          queries: { uid: details },
+          queries,
         });
         setIsLoading(false);
         if (!response.ok) return;
@@ -106,12 +109,14 @@ export const CharacterInfo = () => {
   );
 
   return (
-    <div className="basis-1/2  sm:basis-1/3 sticky top-0 flex flex-col items-start">
-      {isOpen ? (
-        openInfo
-      ) : (
-        <h3>Select a character to view detailed information</h3>
-      )}
+    <div className="basis-1/2  sm:basis-1/3 flex flex-col items-start h-full">
+      <div className=" top-0 sticky flex flex-col items-start w-full">
+        {isOpen ? (
+          openInfo
+        ) : (
+          <h3>Select a character to view detailed information</h3>
+        )}
+      </div>
     </div>
   );
 };

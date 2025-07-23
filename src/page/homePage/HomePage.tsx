@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { StateAppComponent } from "../../models/types/stateAppComponent";
 import { requestAPI } from "../../utils/requestAPI";
 import { isResponse } from "../../utils/checkFn/isResponse";
@@ -18,6 +18,8 @@ export const HomePage = () => {
     isError: false,
     responseStatus: null,
   });
+
+  const renderCharacter = useMemo(() => state.characters, [state.characters]);
 
   const handleSearchInputChange = (value: string): void => {
     setState({ ...state, inputSearch: value });
@@ -69,7 +71,7 @@ export const HomePage = () => {
     requestToApi(searchQuery);
   }, [state.inputSearch, requestToApi]);
 
-  const { characters, isLoading, isError, inputSearch, responseStatus } = state;
+  const { isLoading, isError, inputSearch, responseStatus } = state;
 
   return (
     <>
@@ -86,7 +88,7 @@ export const HomePage = () => {
         </p>
       ) : (
         <div className="flex gap-2 items-start">
-          <ListOfCharacters characters={characters} />
+          <ListOfCharacters characters={renderCharacter} />
           <CharacterInfo />
         </div>
       )}

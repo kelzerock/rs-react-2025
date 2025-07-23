@@ -1,4 +1,5 @@
 import type { MainCharacter } from "./mainCharacter";
+import type { Pagination } from "./pagination";
 
 export type StateAppComponent = {
   characters: MainCharacter[];
@@ -6,4 +7,5 @@ export type StateAppComponent = {
   inputSearch: string;
   isError: boolean;
   responseStatus: number | null;
+  page: Pagination;
 };

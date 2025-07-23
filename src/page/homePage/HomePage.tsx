@@ -9,6 +9,7 @@ import { CrashComponent } from "../../components/CrashComponent";
 import { ListOfCharacters } from "../../components/ListOfCharacters";
 import { CharacterInfo } from "../../components/CharacterInfo";
 import { Methods } from "../../models/enums/methods";
+import { PaginationSection } from "../../components/Pagination";
 
 export const HomePage = () => {
   const [state, setState] = useState<StateAppComponent>({
@@ -17,6 +18,7 @@ export const HomePage = () => {
     inputSearch: "",
     isError: false,
     responseStatus: null,
+    page: null,
   });
 
   const renderCharacter = useMemo(() => state.characters, [state.characters]);
@@ -51,6 +53,7 @@ export const HomePage = () => {
           setState((prev) => ({
             ...prev,
             characters: data.characters,
+            page: data.page,
             isLoading: false,
           }));
         } else {
@@ -87,10 +90,13 @@ export const HomePage = () => {
           Loading data...
         </p>
       ) : (
-        <div className="flex gap-2 items-start">
-          <ListOfCharacters characters={renderCharacter} />
-          <CharacterInfo />
-        </div>
+        <>
+          <div className="flex gap-2 items-start">
+            <ListOfCharacters characters={renderCharacter} />
+            <CharacterInfo />
+          </div>
+          <PaginationSection state={state} setState={setState} />
+        </>
       )}
       {responseStatus !== null && (
         <p

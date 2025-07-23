@@ -6,9 +6,12 @@ import { useSearchParams } from "react-router";
 export const Character = ({ character }: { character: MainCharacter }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { name, gender, alternateReality, bloodType, uid } = character;
-  console.log(searchParams.toString());
   const updateQueryParams = (id: string) => {
-    setSearchParams({ details: id });
+    if (searchParams.has("details")) {
+      setSearchParams({ details: id });
+    } else {
+      setSearchParams({ details: id });
+    }
   };
   return (
     <li

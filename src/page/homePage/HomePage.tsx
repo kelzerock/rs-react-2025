@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { StateAppComponent } from "../../models/types/stateAppComponent";
 import { requestAPI } from "../../utils/requestAPI";
 import { isResponse } from "../../utils/checkFn/isResponse";
@@ -23,38 +23,51 @@ export const HomePage = () => {
     setState({ ...state, inputSearch: value });
   };
 
-  const requestToApi = async (search: string | null = null): Promise<void> => {
-    try {
-      setState({ ...state, responseStatus: null, isLoading: true });
-      const response = await requestAPI({
-        body: { name: search || state.inputSearch },
-        method: Methods.POST,
-        path: "/search",
-      });
-      if (response.status >= 400) {
-        setState({ ...state, responseStatus: response.status });
-      }
-      if (!response.ok) return;
+  const requestToApi = useCallback(
+    async (search: string | null = null): Promise<void> => {
+      try {
+        setState((prev) => ({
+          ...prev,
+          responseStatus: null,
+          isLoading: true,
+        }));
+        const response = await requestAPI({
+          body: { name: search || state.inputSearch },
+          method: Methods.POST,
+          path: "/search",
+        });
 
-      const data = await response.json();
-      console.log({ data });
-      if (isResponse(data)) {
-        setState({ ...state, characters: data.characters, isLoading: false });
-      } else {
-        setState({ ...state, characters: [], isLoading: false });
+        if (response.status >= 400) {
+          setState((prev) => ({ ...prev, responseStatus: response.status }));
+        }
+        if (!response.ok) return;
+
+        const data = await response.json();
+        console.log({ data });
+
+        if (isResponse(data)) {
+          setState((prev) => ({
+            ...prev,
+            characters: data.characters,
+            isLoading: false,
+          }));
+        } else {
+          setState((prev) => ({ ...prev, characters: [], isLoading: false }));
+        }
+      } catch (error) {
+        console.error("Ошибка загрузки:", error);
+        setState((prev) => ({ ...prev, characters: [], isLoading: false }));
       }
-    } catch (error) {
-      console.error("Ошибка загрузки:", error);
-      setState({ ...state, characters: [], isLoading: false });
-    }
-  };
+    },
+    [state.inputSearch],
+  );
 
   useEffect(() => {
     const savedSearch = loadDataFromLocalStorage(LocalStorageKey.inputData);
     const searchQuery = savedSearch ? String(savedSearch) : "";
     setState((prev) => ({ ...prev, inputSearch: searchQuery }));
     requestToApi(searchQuery);
-  }, [state.inputSearch]);
+  }, [state.inputSearch, requestToApi]);
 
   const { characters, isLoading, isError, inputSearch, responseStatus } = state;
 

@@ -12,11 +12,11 @@ export const NavigationBar = () => {
       />
       <nav className="h-auto">
         <ul className="flex rounded-md bg-stone-300 h-auto p-2 gap-2">
-          {Object.entries(Paths).map((el) => {
+          {Object.entries(Paths).map(([key, value]) => {
             return (
-              <li key={el[0]} className="w-full h-full sm:w-auto">
+              <li key={key} className="w-full h-full sm:w-auto">
                 <NavLink
-                  to={el[1]}
+                  to={value}
                   className={({ isActive }) => {
                     const active = isActive ? " underline" : "";
                     return (
@@ -25,7 +25,7 @@ export const NavigationBar = () => {
                     );
                   }}
                 >
-                  {el[0]}
+                  {key}
                 </NavLink>
               </li>
             );

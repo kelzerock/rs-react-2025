@@ -2,7 +2,13 @@ import { useSearchParams } from "react-router";
 import type { StateAppComponent } from "../models/types/stateAppComponent";
 import { Query } from "../models/enums/query";
 
-export const PaginationSection = ({ state }: { state: StateAppComponent }) => {
+export const PaginationSection = ({
+  state,
+  isLoading,
+}: {
+  state: StateAppComponent;
+  isLoading: boolean;
+}) => {
   const [searchParams, setSearchParams] = useSearchParams();
   if (!state.page) return;
   const { pageNumber, totalPages, firstPage, lastPage } = state.page;
@@ -25,7 +31,7 @@ export const PaginationSection = ({ state }: { state: StateAppComponent }) => {
       <div className="flex gap-1">
         <button
           onClick={handlePrevButton}
-          disabled={firstPage}
+          disabled={firstPage || isLoading}
           className="text-md font-bold bg-stone-300 rounded-md py-1 px-5 hover:bg-stone-700 hover:text-stone-200 transition-colors duration-500 capitalize hover:cursor-pointer disabled:bg-stone-100 disabled:text-stone-500 disabled:cursor-auto"
         >
           Prev
@@ -34,7 +40,7 @@ export const PaginationSection = ({ state }: { state: StateAppComponent }) => {
           {pageNumber + OFFSET}
         </span>
         <button
-          disabled={lastPage}
+          disabled={lastPage || isLoading}
           onClick={handleNextButton}
           className="text-md font-bold bg-stone-300 rounded-md py-1 px-5 hover:bg-stone-700 hover:text-stone-200 transition-colors duration-500 capitalize hover:cursor-pointer disabled:bg-stone-100 disabled:text-stone-500 disabled:cursor-auto"
         >

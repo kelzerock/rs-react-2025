@@ -4,6 +4,9 @@ import { requestAPI } from "../utils/requestAPI";
 import { Methods } from "../models/enums/methods";
 import { GridLoader } from "react-spinners";
 import { RequestQuery } from "../models/enums/requestQuery";
+import { Title } from "./helperComponent/title";
+import { CloseIcon } from "./helperComponent/CloseIcon";
+import { Query } from "../models/enums/query";
 
 export const CharacterInfo = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,11 +16,11 @@ export const CharacterInfo = () => {
   > | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
-  const details = searchParams.get("details");
+  const details = searchParams.get(Query.DETAILS);
 
   const handleClose = () => {
-    if (searchParams.has("details")) {
-      searchParams.delete("details");
+    if (searchParams.has(Query.DETAILS)) {
+      searchParams.delete(Query.DETAILS);
       setSearchParams(searchParams);
     }
     setIsOpen(false);
@@ -34,7 +37,11 @@ export const CharacterInfo = () => {
           queries,
         });
         setIsLoading(false);
-        if (!response.ok) return;
+        if (!response.ok) {
+          setInfoAboutCharacter(null);
+          setIsOpen(false);
+          return;
+        }
 
         const data = await response.json();
         setInfoAboutCharacter(data.character);
@@ -42,6 +49,9 @@ export const CharacterInfo = () => {
       setIsLoading(true);
 
       startFetch();
+    } else {
+      setIsOpen(false);
+      setInfoAboutCharacter(null);
     }
   }, [details]);
 
@@ -93,28 +103,23 @@ export const CharacterInfo = () => {
   const openInfo = isLoading ? (
     <GridLoader className=" mt-20 mx-auto" />
   ) : (
-    <div className="bg-amber-50 w-full p-3 rounded-2xl relative">
+    <div className="bg-amber-50 w-full p-3 rounded-2xl relative grow">
       <h4 className=" font-bold text-2xl">CharacterInfo</h4>
       {infoAboutCharacter &&
         infoAboutCharacter !== null &&
         typeof infoAboutCharacter === "object" &&
         renderCharacterInfo(infoAboutCharacter)}
-      <div
-        onClick={handleClose}
-        className=" absolute top-1 right-1 uppercase font-extrabold border-4 rounded-full h-[30px] w-[30px] flex justify-center items-center bg-amber-600 hover:bg-amber-900 hover:cursor-pointer"
-      >
-        x
-      </div>
+      <CloseIcon onClick={handleClose} />
     </div>
   );
 
   return (
-    <div className="basis-1/2  sm:basis-1/3 flex flex-col items-start h-full">
+    <div className="xl:col-span-2 flex flex-col items-start h-full">
       <div className=" top-0 sticky flex flex-col items-start w-full">
         {isOpen ? (
           openInfo
         ) : (
-          <h3>Select a character to view detailed information</h3>
+          <Title title="Select a character to view detailed information" />
         )}
       </div>
     </div>

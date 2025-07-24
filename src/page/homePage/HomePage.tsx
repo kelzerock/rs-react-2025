@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { StateAppComponent } from "../../models/types/stateAppComponent";
 import { requestAPI } from "../../utils/requestAPI";
 import { isResponse } from "../../utils/checkFn/isResponse";
-import { loadDataFromLocalStorage } from "../../utils/loadDataFromLocalStorage";
 import { LocalStorageKey } from "../../models/enums/localStorageKey";
 import { Search } from "../../components/Search";
 import { CrashComponent } from "../../components/CrashComponent";
@@ -13,6 +12,7 @@ import { PaginationSection } from "../../components/Pagination";
 import { useSearchParams } from "react-router";
 import { Query } from "../../models/enums/query";
 import { RequestQuery } from "../../models/enums/requestQuery";
+import { useLS } from "../../hooks/useLS";
 
 export const HomePage = () => {
   const [state, setState] = useState<StateAppComponent>({
@@ -25,13 +25,14 @@ export const HomePage = () => {
     isInitialLoaded: false,
   });
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const [savedSearch, setSavedSearch] = useLS(LocalStorageKey.inputData, "");
   const page = searchParams.get(Query.PAGE);
   const renderCharacter = useMemo(() => state.characters, [state.characters]);
 
   const handleSearchInputChange = (value: string): void => {
     setState({ ...state, inputSearch: value });
-    const newParams = new URLSearchParams(searchParams);
+    setSavedSearch(value);
+    const newParams = new URLSearchParams();
     newParams.set(Query.PAGE, "1");
     setSearchParams(newParams);
   };
@@ -42,7 +43,7 @@ export const HomePage = () => {
       queries = null,
     }: {
       search?: string | null;
-      queries?: URLSearchParams | null | undefined;
+      queries?: URLSearchParams | null;
     }): Promise<void> => {
       try {
         setState((prev) => ({
@@ -94,33 +95,32 @@ export const HomePage = () => {
   );
 
   useEffect(() => {
-    const savedSearch = loadDataFromLocalStorage(LocalStorageKey.inputData);
-    const searchQuery = savedSearch ? String(savedSearch) : "";
+    const page = searchParams.get(Query.PAGE);
+    const details = searchParams.get(Query.DETAILS);
+    const newParams = new URLSearchParams();
 
-    const newParams = new URLSearchParams(searchParams);
-    if (!newParams.has(Query.PAGE)) {
+    if (page) {
+      newParams.set(Query.PAGE, page);
+    } else {
       newParams.set(Query.PAGE, "1");
     }
 
+    if (details) {
+      newParams.set(Query.DETAILS, details);
+    }
     setSearchParams(newParams);
-    // requestToApi({ search: searchQuery, queries: newParams });
-
     setState((prev) => ({
       ...prev,
-      inputSearch: searchQuery,
+      inputSearch: savedSearch,
       isInitialLoaded: true,
     }));
-    console.log("1");
   }, []);
 
   useEffect(() => {
     if (!state.isInitialLoaded) return;
-    console.log("2");
     const newParams = new URLSearchParams(searchParams);
-    console.log({ state: state.inputSearch, page, requestToApi });
     if (page) {
       newParams.set(RequestQuery.PAGE, String(parseInt(page) - 1));
-      // setSearchParams(newParams);
       requestToApi({ queries: newParams, search: state.inputSearch });
     } else {
       console.log("=(");
@@ -138,19 +138,13 @@ export const HomePage = () => {
         initialValue={inputSearch}
       />
       {isError && <CrashComponent />}
-      {isLoading ? (
-        <p className="text-gray-500 text-xl" aria-label="Loading data...">
-          Loading data...
-        </p>
-      ) : (
-        <>
-          <div className="flex gap-2 items-start">
-            <ListOfCharacters characters={renderCharacter} />
-            <CharacterInfo />
-          </div>
-          <PaginationSection state={state} />
-        </>
-      )}
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2 items-start grow">
+        <ListOfCharacters characters={renderCharacter} isLoading={isLoading} />
+        <CharacterInfo />
+      </div>
+      <PaginationSection state={state} isLoading={isLoading} />
+
       {responseStatus !== null && (
         <p
           className="text-red-600 text-sm font-medium mt-2"

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { saveDataToLocalStorage } from "../utils/saveDataToLocalStorage";
 import { LocalStorageKey } from "../models/enums/localStorageKey";
 import { loadDataFromLocalStorage } from "../utils/loadDataFromLocalStorage";
 import type { PropsSearchComponent } from "../models/types/propsSearchComponent";
@@ -20,7 +19,6 @@ export const Search = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    saveDataToLocalStorage(inputValue, LocalStorageKey.inputData);
     onInputChange(inputValue);
   };
 

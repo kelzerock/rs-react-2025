@@ -28,7 +28,7 @@ export const Character = memo(function Character({
   };
   return (
     <li
-      className=" rounded-md p-2 bg-cyan-50 flex flex-col gap-0.5"
+      className=" rounded-md p-2 bg-cyan-50 flex flex-col gap-0.5 "
       onClick={() => updateQueryParams(uid)}
     >
       <span>

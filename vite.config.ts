@@ -10,13 +10,15 @@ export default defineConfig({
     setupFiles: "./test/setup.ts",
     globals: true,
     environment: "jsdom",
+    resolveSnapshotPath: (testPath, snapshotExtension) =>
+      `./snapshots/${testPath.split("/").pop()}${snapshotExtension}`,
     coverage: {
       provider: "v8",
       include: ["src/**/*.{js,jsx,ts,tsx}"],
       exclude: [
         "src/**/*.test.{js,jsx,ts,tsx}",
         "src/**/*.spec.{js,jsx,ts,tsx}",
-        "src/index.{js,jsx,ts,tsx}",
+        "src/main.{js,jsx,ts,tsx}",
         "src/setupTests.{js,ts}",
         "src/**/*.d.ts",
       ],

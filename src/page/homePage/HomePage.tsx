@@ -26,6 +26,7 @@ export const HomePage = () => {
   });
   const [searchParams, setSearchParams] = useSearchParams();
   const [savedSearch, setSavedSearch] = useLS(LocalStorageKey.inputData, "");
+
   const page = searchParams.get(Query.PAGE);
   const renderCharacter = useMemo(() => state.characters, [state.characters]);
 
@@ -95,6 +96,7 @@ export const HomePage = () => {
   );
 
   useEffect(() => {
+    console.log({ savedSearch });
     const page = searchParams.get(Query.PAGE);
     const details = searchParams.get(Query.DETAILS);
     const newParams = new URLSearchParams();
@@ -120,6 +122,7 @@ export const HomePage = () => {
     if (!state.isInitialLoaded) return;
     const newParams = new URLSearchParams(searchParams);
     if (page) {
+      console.log({ state });
       newParams.set(RequestQuery.PAGE, String(parseInt(page) - 1));
       requestToApi({ queries: newParams, search: state.inputSearch });
     } else {

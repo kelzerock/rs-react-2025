@@ -3,7 +3,10 @@ import logo from "../assets/rss-logo.svg";
 
 export const Footer = () => {
   return (
-    <footer className="flex justify-evenly items-center bg-gray-300 p-4 font-semibold text-xl rounded-2xl">
+    <footer
+      className="flex justify-evenly items-center bg-gray-300 p-4 font-semibold text-xl rounded-2xl"
+      data-testid="footer"
+    >
       <a
         href={LINK_TO_GITHUB}
         target="_blank"

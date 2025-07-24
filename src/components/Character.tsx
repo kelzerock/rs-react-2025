@@ -2,39 +2,29 @@ import type { MainCharacter } from "../models/types/mainCharacter";
 import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 import { CiNoWaitingSign } from "react-icons/ci";
 import { memo } from "react";
-import { Query } from "../models/enums/query";
 
 export const Character = memo(function Character({
   character,
-  setSearchParams,
-  searchParams,
+  onClick,
 }: {
   character: MainCharacter;
-  searchParams: URLSearchParams;
-  setSearchParams: (data: URLSearchParams) => void;
+  onClick: (id: string) => void;
 }) {
   const { name, gender, alternateReality, bloodType, uid } = character;
-  const updateQueryParams = (id: string) => {
-    const page = searchParams.get(Query.PAGE);
-    const params = new URLSearchParams();
 
-    if (page) {
-      params.set(Query.PAGE, page);
-    }
-
-    params.set(Query.DETAILS, id);
-
-    setSearchParams(params);
-  };
   return (
     <li
-      className=" rounded-md p-2 bg-stone-200 flex flex-col gap-0.5 "
-      onClick={() => updateQueryParams(uid)}
+      className=" rounded-md p-2 bg-stone-200 flex flex-col gap-0.5 hover:cursor-pointer"
+      onClick={() => onClick(uid)}
+      data-testid="wrapper"
     >
-      <span>
+      <span data-testid="name">
         Name: <strong>{name}</strong>
       </span>
-      <div className="border bottom-1 rounded-md border-gray-600 p-1">
+      <div
+        className="border bottom-1 rounded-md border-gray-600 p-1"
+        data-testid="addition-info"
+      >
         <h2 className=" font-light text-sm">
           Addition information about character:
         </h2>

@@ -5,15 +5,21 @@ import { NavigationBar } from "./components/NavigationBar";
 
 const App = () => {
   return (
-    <div className="container mx-auto p-3 flex flex-col gap-3 h-full">
-      <ErrorBoundary>
-        <div className="bg-blue-50 rounded-2xl p-3 flex flex-col gap-2 grow">
+    <ErrorBoundary>
+      <div
+        className="container mx-auto p-3 flex flex-col gap-3 h-full"
+        data-testid="wrapper"
+      >
+        <main
+          className="bg-blue-50 rounded-2xl p-3 flex flex-col gap-2 grow"
+          data-testid="main-container"
+        >
           <NavigationBar />
           <Outlet />
-        </div>
+        </main>
         <Footer />
-      </ErrorBoundary>
-    </div>
+      </div>
+    </ErrorBoundary>
   );
 };
 

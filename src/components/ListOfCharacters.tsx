@@ -4,6 +4,7 @@ import { Character } from "./Character";
 import { useSearchParams } from "react-router";
 import { GridLoader } from "react-spinners";
 import { Title } from "./helperComponent/title";
+import { Query } from "../models/enums/query";
 
 export const ListOfCharacters = memo(function ListOfCharacters({
   characters,
@@ -13,8 +14,18 @@ export const ListOfCharacters = memo(function ListOfCharacters({
   isLoading: boolean;
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const cachedSetSearchParams = useCallback((data: URLSearchParams) => {
-    setSearchParams(data);
+
+  const handleClick = useCallback((id: string) => {
+    const page = searchParams.get(Query.PAGE);
+    const params = new URLSearchParams();
+
+    if (page) {
+      params.set(Query.PAGE, page);
+    }
+
+    params.set(Query.DETAILS, id);
+
+    setSearchParams(params);
   }, []);
 
   return (
@@ -31,8 +42,7 @@ export const ListOfCharacters = memo(function ListOfCharacters({
             <Character
               character={character}
               key={character.uid}
-              setSearchParams={cachedSetSearchParams}
-              searchParams={searchParams}
+              onClick={handleClick}
             />
           ))}
         </ul>

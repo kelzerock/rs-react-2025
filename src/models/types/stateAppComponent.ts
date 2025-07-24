@@ -8,4 +8,5 @@ export type StateAppComponent = {
   isError: boolean;
   responseStatus: number | null;
   page: Pagination;
+  isInitialLoaded: boolean;
 };

@@ -1,81 +1,24 @@
 import { useSearchParams } from "react-router";
-import { Methods } from "../models/enums/methods";
 import type { StateAppComponent } from "../models/types/stateAppComponent";
-import { isResponse } from "../utils/checkFn/isResponse";
-import { requestAPI } from "../utils/requestAPI";
-import { RequestQuery } from "../models/enums/requestQuery";
+import { Query } from "../models/enums/query";
 
-export const PaginationSection = ({
-  state,
-  setState,
-}: {
-  state: StateAppComponent;
-  setState: React.Dispatch<React.SetStateAction<StateAppComponent>>;
-}) => {
+export const PaginationSection = ({ state }: { state: StateAppComponent }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   if (!state.page) return;
   const { pageNumber, totalPages, firstPage, lastPage } = state.page;
   const OFFSET = 1;
 
-  const requestToAPI = async (page: number) => {
-    try {
-      setState((prev) => ({
-        ...prev,
-        responseStatus: null,
-        isLoading: true,
-      }));
-      const queries = new URLSearchParams();
-      queries.set(RequestQuery.PAGE, String(page));
-      const response = await requestAPI({
-        body: { name: state.inputSearch },
-        method: Methods.POST,
-        path: "/search",
-        queries,
-      });
-
-      if (response.status >= 400) {
-        setState((prev) => ({ ...prev, responseStatus: response.status }));
-      }
-      if (!response.ok) return;
-
-      const data = await response.json();
-      console.log({ data });
-
-      if (isResponse(data)) {
-        setState((prev) => ({
-          ...prev,
-          characters: data.characters,
-          page: data.page,
-          isLoading: false,
-        }));
-        const details = searchParams.get("details");
-        const params = new URLSearchParams();
-
-        params.set("page", String(data.page.pageNumber + 1));
-
-        if (details) {
-          params.set("details", details);
-        }
-
-        setSearchParams(params);
-      } else {
-        setState((prev) => ({ ...prev, characters: [], isLoading: false }));
-        if (searchParams.has("page")) {
-          searchParams.delete("page");
-          setSearchParams(searchParams);
-        }
-      }
-    } catch (error) {
-      console.error("Ошибка загрузки:", error);
-      setState((prev) => ({ ...prev, characters: [], isLoading: false }));
-    }
+  const changeUrlPage = (page: string) => {
+    const params = new URLSearchParams(searchParams);
+    params.set(Query.PAGE, page);
+    setSearchParams(params);
   };
 
-  const handlePrevButton = async () => {
-    await requestToAPI(pageNumber - 1);
+  const handlePrevButton = () => {
+    changeUrlPage(String(pageNumber + 1 - 1));
   };
-  const handleNextButton = async () => {
-    await requestToAPI(pageNumber + 1);
+  const handleNextButton = () => {
+    changeUrlPage(String(pageNumber + 1 + 1));
   };
   return (
     <div className="bg-stone-50 p-2 flex flex-col justify-center gap-1 items-center rounded-xl">

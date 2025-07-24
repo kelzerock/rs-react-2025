@@ -4,7 +4,7 @@ import { Methods } from "../models/enums/methods";
 type RequestAPI = {
   body?: { [key: string]: string };
   method: (typeof Methods)[keyof typeof Methods];
-  queries?: URLSearchParams;
+  queries?: URLSearchParams | null;
   path?: string;
 };
 

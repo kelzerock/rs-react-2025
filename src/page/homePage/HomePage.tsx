@@ -22,25 +22,29 @@ export const HomePage = () => {
     isError: false,
     responseStatus: null,
     page: null,
+    isInitialLoaded: false,
   });
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  const page = searchParams.get(Query.PAGE);
   const renderCharacter = useMemo(() => state.characters, [state.characters]);
 
   const handleSearchInputChange = (value: string): void => {
     setState({ ...state, inputSearch: value });
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set(Query.PAGE, "1");
+    setSearchParams(newParams);
   };
 
   const requestToApi = useCallback(
-    async (search: string | null = null): Promise<void> => {
+    async ({
+      search = null,
+      queries = null,
+    }: {
+      search?: string | null;
+      queries?: URLSearchParams | null | undefined;
+    }): Promise<void> => {
       try {
-        const queries = new URLSearchParams();
-        const page = searchParams.get(Query.PAGE);
-
-        if (page) {
-          const correctPage = String(parseFloat(page) - 1);
-          queries.set(RequestQuery.PAGE, correctPage);
-        }
         setState((prev) => ({
           ...prev,
           responseStatus: null,
@@ -59,9 +63,9 @@ export const HomePage = () => {
         if (!response.ok) return;
 
         const data = await response.json();
-        console.log({ data });
 
         if (isResponse(data)) {
+          console.log({ data });
           setState((prev) => ({
             ...prev,
             characters: data.characters,
@@ -69,11 +73,21 @@ export const HomePage = () => {
             isLoading: false,
           }));
         } else {
-          setState((prev) => ({ ...prev, characters: [], isLoading: false }));
+          setState((prev) => ({
+            ...prev,
+            characters: [],
+            page: null,
+            isLoading: false,
+          }));
         }
       } catch (error) {
         console.error("Ошибка загрузки:", error);
-        setState((prev) => ({ ...prev, characters: [], isLoading: false }));
+        setState((prev) => ({
+          ...prev,
+          characters: [],
+          page: null,
+          isLoading: false,
+        }));
       }
     },
     [state.inputSearch],
@@ -82,9 +96,36 @@ export const HomePage = () => {
   useEffect(() => {
     const savedSearch = loadDataFromLocalStorage(LocalStorageKey.inputData);
     const searchQuery = savedSearch ? String(savedSearch) : "";
-    setState((prev) => ({ ...prev, inputSearch: searchQuery }));
-    requestToApi(searchQuery);
-  }, [state.inputSearch, requestToApi]);
+
+    const newParams = new URLSearchParams(searchParams);
+    if (!newParams.has(Query.PAGE)) {
+      newParams.set(Query.PAGE, "1");
+    }
+
+    setSearchParams(newParams);
+    // requestToApi({ search: searchQuery, queries: newParams });
+
+    setState((prev) => ({
+      ...prev,
+      inputSearch: searchQuery,
+      isInitialLoaded: true,
+    }));
+    console.log("1");
+  }, []);
+
+  useEffect(() => {
+    if (!state.isInitialLoaded) return;
+    console.log("2");
+    const newParams = new URLSearchParams(searchParams);
+    console.log({ state: state.inputSearch, page, requestToApi });
+    if (page) {
+      newParams.set(RequestQuery.PAGE, String(parseInt(page) - 1));
+      // setSearchParams(newParams);
+      requestToApi({ queries: newParams, search: state.inputSearch });
+    } else {
+      console.log("=(");
+    }
+  }, [state.inputSearch, page, requestToApi]);
 
   const { isLoading, isError, inputSearch, responseStatus } = state;
 
@@ -107,7 +148,7 @@ export const HomePage = () => {
             <ListOfCharacters characters={renderCharacter} />
             <CharacterInfo />
           </div>
-          <PaginationSection state={state} setState={setState} />
+          <PaginationSection state={state} />
         </>
       )}
       {responseStatus !== null && (

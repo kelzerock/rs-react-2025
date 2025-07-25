@@ -2,9 +2,17 @@ import logo from "../../assets/rss-logo.svg";
 
 const AboutPage = () => {
   return (
-    <div className=" bg-stone-50 rounded-md p-4 grow flex flex-col gap-6">
-      <h1 className=" font-bold text-3xl">Hi, I&apos;m Aleksei</h1>
-      <div className="grid grid-cols-7 p-3 border-8 rounded-md border-stone-200 gap-4">
+    <div
+      className=" bg-stone-50 rounded-md p-4 grow flex flex-col gap-6"
+      data-testid="wrapper"
+    >
+      <h1 className=" font-bold text-3xl" data-testid="title">
+        Hi, I&apos;m Aleksei
+      </h1>
+      <div
+        className="grid grid-cols-7 p-3 border-8 rounded-md border-stone-200 gap-4"
+        data-testid="addition-info"
+      >
         <p className=" col-span-5 text-justify">
           I build apps using JavaScript, TypeScript, and React, and I&apos;m
           always diving deeper into UI/UX details, performance tricks, and
@@ -38,6 +46,7 @@ const AboutPage = () => {
             src={logo}
             alt="Logo Rsschool"
             className=" max-w-3/4 max-h-3/4 opacity-15 absolute"
+            data-testid="logo-rs"
           />
         </a>
       </div>

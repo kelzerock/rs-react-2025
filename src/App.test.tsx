@@ -8,6 +8,6 @@ test("render container and main block", () => {
       <App />
     </BrowserRouter>,
   );
-  expect(screen.getByTestId("wrapper")).toBeInTheDocument();
-  expect(screen.getByTestId("main-container")).toBeInTheDocument();
+  expect(screen.getByTestId("app-wrapper")).toBeInTheDocument();
+  expect(screen.getByTestId("app-main-container")).toBeInTheDocument();
 });

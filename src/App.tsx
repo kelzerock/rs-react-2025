@@ -8,11 +8,11 @@ const App = () => {
     <ErrorBoundary>
       <div
         className="container mx-auto p-3 flex flex-col gap-3 h-full"
-        data-testid="wrapper"
+        data-testid="app-wrapper"
       >
         <main
           className="bg-blue-50 rounded-2xl p-3 flex flex-col gap-2 grow"
-          data-testid="main-container"
+          data-testid="app-main-container"
         >
           <NavigationBar />
           <Outlet />

@@ -4,13 +4,17 @@ import logo from "../assets/logo.webp";
 
 export const NavigationBar = () => {
   return (
-    <header className=" flex gap-6 bg-stone-50 p-4 rounded-md items-center">
+    <header
+      data-testid="wrapper"
+      className=" flex gap-6 bg-stone-50 p-4 rounded-md items-center"
+    >
       <img
+        data-testid="logo"
         src={logo}
         alt="logo star trek"
         className=" w-[50px] h-[50px] rounded-full"
       />
-      <nav className="h-auto">
+      <nav className="h-auto" data-testid="nav">
         <ul className="flex rounded-md bg-stone-300 h-auto p-2 gap-2">
           {Object.entries(Paths).map(([key, value]) => {
             return (

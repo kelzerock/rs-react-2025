@@ -3,7 +3,7 @@ import type { MainCharacter } from "../models/types/mainCharacter";
 import { Character } from "./Character";
 import { useSearchParams } from "react-router";
 import { GridLoader } from "react-spinners";
-import { Title } from "./helperComponent/title";
+import { Title } from "./helperComponent/Title";
 import { Query } from "../models/enums/query";
 
 export const ListOfCharacters = memo(function ListOfCharacters({

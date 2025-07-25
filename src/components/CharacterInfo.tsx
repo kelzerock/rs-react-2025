@@ -4,7 +4,7 @@ import { requestAPI } from "../utils/requestAPI";
 import { Methods } from "../models/enums/methods";
 import { GridLoader } from "react-spinners";
 import { RequestQuery } from "../models/enums/requestQuery";
-import { Title } from "./helperComponent/title";
+import { Title } from "./helperComponent/Title";
 import { CloseIcon } from "./helperComponent/CloseIcon";
 import { Query } from "../models/enums/query";
 

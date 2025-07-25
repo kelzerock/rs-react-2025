@@ -131,6 +131,13 @@ export const HomePage = () => {
   }, [state.inputSearch, page, requestToApi]);
 
   const { isLoading, isError, inputSearch, responseStatus } = state;
+  const memoPaginationProps = useMemo(
+    () => ({
+      page: state.page,
+      isLoading: state.isLoading,
+    }),
+    [state.page, state.isLoading],
+  );
 
   return (
     <>
@@ -146,7 +153,7 @@ export const HomePage = () => {
         <ListOfCharacters characters={renderCharacter} isLoading={isLoading} />
         <CharacterInfo />
       </div>
-      <PaginationSection state={state} isLoading={isLoading} />
+      <PaginationSection {...memoPaginationProps} />
 
       {responseStatus !== null && (
         <p

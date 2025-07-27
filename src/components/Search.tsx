@@ -6,7 +6,6 @@ export const Search = ({
   isLoading,
   initialValue,
 }: PropsSearchComponent) => {
-  console.log({ initialValue });
   const [inputValue, setInputValue] = useState(initialValue);
 
   useEffect(() => {

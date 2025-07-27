@@ -67,7 +67,6 @@ export const HomePage = () => {
         const data = await response.json();
 
         if (isResponse(data)) {
-          console.log({ data });
           setState((prev) => ({
             ...prev,
             characters: data.characters,
@@ -121,7 +120,6 @@ export const HomePage = () => {
     if (!state.isInitialLoaded) return;
     const newParams = new URLSearchParams(searchParams);
     if (page) {
-      console.log({ state });
       newParams.set(RequestQuery.PAGE, String(parseInt(page) - 1));
       requestToApi({ queries: newParams, search: state.inputSearch });
     } else {

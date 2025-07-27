@@ -23,7 +23,7 @@ export const ListOfCharacters = memo(function ListOfCharacters({
 
       setSearchParams(params);
     },
-    [searchParams],
+    [searchParams, setSearchParams],
   );
 
   return (

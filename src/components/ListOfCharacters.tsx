@@ -16,13 +16,7 @@ export const ListOfCharacters = memo(function ListOfCharacters({
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handleClick = useCallback((id: string) => {
-    const page = searchParams.get(Query.PAGE);
     const params = new URLSearchParams(searchParams);
-
-    console.log({ searchParams, page });
-    // if (page) {
-    //   params.set(Query.PAGE, page);
-    // }
 
     params.set(Query.DETAILS, id);
 
@@ -32,7 +26,10 @@ export const ListOfCharacters = memo(function ListOfCharacters({
   return (
     <div className="xl:grid-cols-3 sm:col-span-2 xl:col-span-3 h-full bg-stone-50 rounded-md">
       {isLoading ? (
-        <div className="w-full h-full flex justify-center items-center col-span-1 sm:col-span-2 xl:col-span-3">
+        <div
+          className="w-full h-full flex justify-center items-center col-span-1 sm:col-span-2 xl:col-span-3"
+          role="status"
+        >
           <GridLoader size="40px" />
         </div>
       ) : characters.length === 0 ? (

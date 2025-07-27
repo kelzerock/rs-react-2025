@@ -96,7 +96,6 @@ export const HomePage = () => {
   );
 
   useEffect(() => {
-    console.log({ savedSearch });
     const page = searchParams.get(Query.PAGE);
     const details = searchParams.get(Query.DETAILS);
     const newParams = new URLSearchParams();

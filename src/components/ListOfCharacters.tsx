@@ -15,13 +15,16 @@ export const ListOfCharacters = memo(function ListOfCharacters({
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const handleClick = useCallback((id: string) => {
-    const params = new URLSearchParams(searchParams);
+  const handleClick = useCallback(
+    (id: string) => {
+      const params = new URLSearchParams(searchParams);
 
-    params.set(Query.DETAILS, id);
+      params.set(Query.DETAILS, id);
 
-    setSearchParams(params);
-  }, []);
+      setSearchParams(params);
+    },
+    [searchParams],
+  );
 
   return (
     <div className="xl:grid-cols-3 sm:col-span-2 xl:col-span-3 h-full bg-stone-50 rounded-md">

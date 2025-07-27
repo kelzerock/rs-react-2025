@@ -101,11 +101,18 @@ export const CharacterInfo = () => {
   };
 
   const openInfo = isLoading ? (
-    <GridLoader className=" mt-20 mx-auto" />
+    <div
+      className="w-full h-full flex justify-center items-center"
+      role="status"
+    >
+      <GridLoader className="" />
+    </div>
   ) : (
     <div className="relative border-8 border-amber-50 rounded-2xl bg-amber-50 w-full">
       <div className="bg-amber-50 w-full p-3 rounded-2xl  max-h-[600px] overflow-y-scroll overflow-x-hidden  scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-300">
-        <h4 className=" font-bold text-2xl">CharacterInfo</h4>
+        <h4 className=" font-bold text-2xl" data-testid="main-title">
+          CharacterInfo
+        </h4>
         {infoAboutCharacter &&
           infoAboutCharacter !== null &&
           typeof infoAboutCharacter === "object" &&
@@ -121,7 +128,10 @@ export const CharacterInfo = () => {
         {isOpen ? (
           openInfo
         ) : (
-          <Title title="Select a character to view detailed information" />
+          <Title
+            title="Select a character to view detailed information"
+            test-id="title-without-data"
+          />
         )}
       </div>
     </div>

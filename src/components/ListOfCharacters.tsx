@@ -17,11 +17,12 @@ export const ListOfCharacters = memo(function ListOfCharacters({
 
   const handleClick = useCallback((id: string) => {
     const page = searchParams.get(Query.PAGE);
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(searchParams);
 
-    if (page) {
-      params.set(Query.PAGE, page);
-    }
+    console.log({ searchParams, page });
+    // if (page) {
+    //   params.set(Query.PAGE, page);
+    // }
 
     params.set(Query.DETAILS, id);
 

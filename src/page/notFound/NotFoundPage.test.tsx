@@ -27,7 +27,7 @@ describe("NotFound component", () => {
       </MemoryRouter>,
     );
     expect(screen.getByTestId("wrapper")).toBeInTheDocument();
-    expect(screen.getByTestId("title")).toBeInTheDocument();
+    expect(screen.getByTestId("title-not-found-page")).toBeInTheDocument();
     expect(screen.getByTestId("link")).toBeInTheDocument();
   });
 });

@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@plugin 'tailwind-scrollbar';
+
+html,
+body {
+  height: 100%;
+}

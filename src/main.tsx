@@ -3,6 +3,8 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { RouterProvider } from "react-router";
 import { router } from "./router/router.tsx";
+import { Provider } from "react-redux";
+import { store } from "./store/store.ts";
 
 const root = document.createElement("div");
 root.id = "root";
@@ -11,6 +13,8 @@ document.body.append(root);
 
 createRoot(root).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </StrictMode>,
 );

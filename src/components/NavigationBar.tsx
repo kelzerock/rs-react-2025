@@ -6,7 +6,7 @@ export const NavigationBar = () => {
   return (
     <header
       data-testid="wrapper"
-      className=" flex gap-6 bg-stone-50 p-4 rounded-md items-center"
+      className=" flex gap-6 bg-stone-50 p-4 rounded-md items-center relative"
     >
       <img
         data-testid="logo"

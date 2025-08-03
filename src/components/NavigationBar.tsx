@@ -1,6 +1,7 @@
 import { NavLink } from "react-router";
 import { Paths } from "../models/enums/paths";
 import logo from "../assets/logo.webp";
+import { ThemePanel } from "./ThemePanel";
 
 export const NavigationBar = () => {
   return (
@@ -36,6 +37,7 @@ export const NavigationBar = () => {
           })}
         </ul>
       </nav>
+      <ThemePanel />
     </header>
   );
 };

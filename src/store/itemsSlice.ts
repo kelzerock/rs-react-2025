@@ -1,12 +1,26 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "./store";
+import type z from "zod";
+import type { CharacterBaseZ } from "../schema/characterBaseZ";
 
-export const itemsSlices = createSlice({
+type Character = z.infer<typeof CharacterBaseZ>;
+const initialState: Character[] = [];
+
+export const itemsSlice = createSlice({
   name: "item",
-  initialState: "",
-  reducers: {},
+  initialState,
+  reducers: {
+    toggleItem: (state, action: PayloadAction<Character>) => {
+      if (!state.some((item) => item.uid === action.payload.uid)) {
+        return [...state, action.payload];
+      } else {
+        return state.filter((item) => item.uid !== action.payload.uid);
+      }
+    },
+  },
 });
 
 export const selectItems = (state: RootState) => state.items;
+export const { toggleItem } = itemsSlice.actions;
 
-export default itemsSlices.reducer;
+export default itemsSlice.reducer;

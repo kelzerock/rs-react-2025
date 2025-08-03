@@ -51,8 +51,8 @@ describe("Character component", () => {
         onClick={mockOnClick}
       />,
     );
-    const card = screen.getByTestId("wrapper");
-    fireEvent.click(card);
+    const buttonMoreInfo = screen.getByTestId("btn-more-info");
+    fireEvent.click(buttonMoreInfo);
     expect(mockOnClick).toHaveBeenCalled();
   });
 

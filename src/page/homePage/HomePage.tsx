@@ -125,7 +125,7 @@ export const HomePage = () => {
     } else {
       console.log("=(");
     }
-  }, [state.inputSearch, page, requestToApi]);
+  }, [state.inputSearch, page, requestToApi, state.isInitialLoaded]);
 
   const { isLoading, isError, inputSearch, responseStatus } = state;
   const memoPaginationProps = useMemo(

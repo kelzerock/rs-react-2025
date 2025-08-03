@@ -29,14 +29,15 @@ export const Character = memo(function Character({
         Name: <strong>{name}</strong>
       </span>
       <div className="flex gap-2 items-center h-10">
-        <button
-          className="bg-blue-500 p-2 rounded-md h-full hover:cursor-pointer hover:bg-blue-800 transition-colors duration-300"
-          onClick={() => {
-            dispatch(toggleItem(character));
-          }}
-        >
+        <label className="flex gap-2 items-center bg-blue-500 p-2 rounded-md h-full hover:cursor-pointer hover:bg-blue-800 transition-colors duration-300">
+          <input
+            type="checkbox"
+            onChange={() => {
+              dispatch(toggleItem(character));
+            }}
+          />
           {isFavorite ? <FaStar color="yellow" /> : <FaRegStar />}
-        </button>
+        </label>
         <button
           data-testid="btn-more-info"
           onClick={() => onClick(uid)}

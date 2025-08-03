@@ -12,9 +12,14 @@ export const FlyOutPanel = () => {
   const countItems = items.length;
   if (countItems > 0)
     return (
-      <div className=" bg-stone-700/80 p-2 text-stone-100 font-semibold rounded-md w-full sticky bottom-3 col-span-full">
+      <div
+        data-testid="flyOutPanel-wrapper"
+        className=" bg-stone-700/80 p-2 text-stone-100 font-semibold rounded-md w-full sticky bottom-3 col-span-full"
+      >
         <h6>Information about favorite items:</h6>
-        <span>Selected items: {countItems}</span>
+        <span data-testid="flyOutPanel-countItems">
+          Selected items: {countItems}
+        </span>
         <div className="flex flex-col sm:flex-row gap-3">
           <button
             type="button"

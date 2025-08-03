@@ -13,6 +13,7 @@ import { useSearchParams } from "react-router";
 import { Query } from "../../models/enums/query";
 import { RequestQuery } from "../../models/enums/requestQuery";
 import { useLS } from "../../hooks/useLS";
+import { FlyOutPanel } from "../../components/FlyOutPanel";
 
 export const HomePage = () => {
   const [state, setState] = useState<StateAppComponent>({
@@ -146,9 +147,10 @@ export const HomePage = () => {
       />
       {isError && <CrashComponent />}
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2 items-start grow">
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2 items-start grow relative">
         <ListOfCharacters characters={renderCharacter} isLoading={isLoading} />
         <CharacterInfo />
+        <FlyOutPanel />
       </div>
       <PaginationSection {...memoPaginationProps} />
 

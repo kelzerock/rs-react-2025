@@ -1,0 +1,31 @@
+import { useAppDispatch, useAppSelector } from "../hooks/appHook";
+import { removeAllItems } from "../store/itemsSlice";
+
+export const FlyOutPanel = () => {
+  const items = useAppSelector((state) => state.items);
+  const dispatch = useAppDispatch();
+
+  const countItems = items.length;
+  if (countItems > 0)
+    return (
+      <div className=" bg-stone-700 p-2 text-stone-100 font-semibold rounded-md w-full sticky bottom-0 col-span-full">
+        <h6>Information about favorite items:</h6>
+        <span>Selected items: {countItems}</span>
+        <div className="flex gap-3">
+          <button
+            type="button"
+            onClick={() => dispatch(removeAllItems())}
+            className="bg-stone-200 text-stone-800 px-3 rounded-md hover:cursor-pointer hover:bg-stone-400 transition-all duration-300 hover:text-stone-50"
+          >
+            unselected all
+          </button>
+          <button
+            type="button"
+            className="bg-stone-200 text-stone-800 px-3 rounded-md hover:cursor-pointer hover:bg-stone-400 transition-all duration-300 hover:text-stone-50"
+          >
+            save selected items
+          </button>
+        </div>
+      </div>
+    );
+};

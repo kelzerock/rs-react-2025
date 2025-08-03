@@ -17,10 +17,13 @@ export const itemsSlice = createSlice({
         return state.filter((item) => item.uid !== action.payload.uid);
       }
     },
+    removeAllItems: () => {
+      return [];
+    },
   },
 });
 
 export const selectItems = (state: RootState) => state.items;
-export const { toggleItem } = itemsSlice.actions;
+export const { toggleItem, removeAllItems } = itemsSlice.actions;
 
 export default itemsSlice.reducer;

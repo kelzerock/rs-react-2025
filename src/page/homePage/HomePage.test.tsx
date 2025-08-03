@@ -1,11 +1,15 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import { HomePage } from "./HomePage";
+import { Provider } from "react-redux";
+import { store } from "../../store/store";
 
 test("renders title and search component", () => {
   render(
     <MemoryRouter>
-      <HomePage />
+      <Provider store={store}>
+        <HomePage />
+      </Provider>
     </MemoryRouter>,
   );
 
@@ -28,7 +32,9 @@ describe("test error at component", () => {
   test("shows error message when API request fails", async () => {
     render(
       <MemoryRouter>
-        <HomePage />
+        <Provider store={store}>
+          <HomePage />
+        </Provider>
       </MemoryRouter>,
     );
 

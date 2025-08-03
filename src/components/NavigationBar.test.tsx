@@ -1,12 +1,16 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import { NavigationBar } from "./NavigationBar";
+import { Provider } from "react-redux";
+import { store } from "../store/store";
 
 describe("Navigation bar component", () => {
   it("snapshot of component", () => {
     const { asFragment } = render(
       <MemoryRouter>
-        <NavigationBar />
+        <Provider store={store}>
+          <NavigationBar />
+        </Provider>
       </MemoryRouter>,
     );
     expect(asFragment()).toMatchSnapshot();
@@ -15,7 +19,9 @@ describe("Navigation bar component", () => {
   test("renders without crash", () => {
     render(
       <MemoryRouter>
-        <NavigationBar />
+        <Provider store={store}>
+          <NavigationBar />
+        </Provider>
       </MemoryRouter>,
     );
   });
@@ -23,7 +29,9 @@ describe("Navigation bar component", () => {
   it("rendered main blocks", () => {
     render(
       <MemoryRouter>
-        <NavigationBar />
+        <Provider store={store}>
+          <NavigationBar />
+        </Provider>
       </MemoryRouter>,
     );
     expect(screen.getByTestId("wrapper")).toBeInTheDocument();

@@ -32,6 +32,7 @@ export const Character = memo(function Character({
         <label className="flex gap-2 items-center bg-blue-500 p-2 rounded-md h-full hover:cursor-pointer hover:bg-blue-800 transition-colors duration-300">
           <input
             type="checkbox"
+            className="hover:cursor-pointer"
             checked={isFavorite}
             onChange={() => {
               dispatch(toggleItem(character));

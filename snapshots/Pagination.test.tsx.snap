@@ -3,7 +3,7 @@
 exports[`Pagination component > renders correctly (snapshot) 1`] = `
 <DocumentFragment>
   <div
-    class="bg-stone-50 p-2 flex flex-col justify-center gap-1 items-center rounded-xl"
+    class="bg-stone-50 dark:bg-stone-700 p-2 flex flex-col justify-center gap-1 items-center rounded-xl"
     data-testid="wrapper"
   >
     <div
@@ -28,7 +28,9 @@ exports[`Pagination component > renders correctly (snapshot) 1`] = `
         Next
       </button>
     </div>
-    <span>
+    <span
+      class="dark:text-stone-200"
+    >
       Total page: 10
     </span>
   </div>

@@ -1,13 +1,11 @@
-import { useAppDispatch, useAppSelector } from "../hooks/appHook";
-import { toggleTheme } from "../store/themeSlice";
+import { useThemeContext } from "../context/themeContext";
 import { WiDaySunny } from "react-icons/wi";
 import { WiMoonWaningCrescent4 } from "react-icons/wi";
 
 export const ThemePanel = () => {
-  const isLight = useAppSelector((state) => state.theme.isLight);
-  const dispatch = useAppDispatch();
+  const { isLight, setIsLight } = useThemeContext();
   const handleClick = () => {
-    dispatch(toggleTheme());
+    setIsLight(isLight ? false : true);
   };
   return (
     <button

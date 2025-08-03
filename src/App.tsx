@@ -2,10 +2,10 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { Footer } from "./components/Footer";
 import { Outlet } from "react-router";
 import { NavigationBar } from "./components/NavigationBar";
-import { useAppSelector } from "./hooks/appHook";
+import { useThemeContext } from "./context/themeContext";
 
 const App = () => {
-  const isLight = useAppSelector((state) => state.theme.isLight);
+  const { isLight } = useThemeContext();
   return (
     <ErrorBoundary>
       <div

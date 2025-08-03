@@ -29,7 +29,7 @@ export const PaginationSection = memo(function PaginationSection({
   };
   return (
     <div
-      className="bg-stone-50 p-2 flex flex-col justify-center gap-1 items-center rounded-xl"
+      className="bg-stone-50 dark:bg-stone-700 p-2 flex flex-col justify-center gap-1 items-center rounded-xl"
       data-testid="wrapper"
     >
       <div className="flex gap-1">
@@ -56,7 +56,7 @@ export const PaginationSection = memo(function PaginationSection({
           Next
         </button>
       </div>
-      <span>Total page: {totalPages}</span>
+      <span className="dark:text-stone-200">Total page: {totalPages}</span>
     </div>
   );
 });

@@ -22,7 +22,7 @@ export const Character = memo(function Character({
 
   return (
     <li
-      className=" rounded-md p-2 bg-stone-200 flex flex-col gap-0.5 hover:cursor-pointer"
+      className=" rounded-md p-2 bg-stone-200 dark:bg-stone-300 flex flex-col gap-0.5 hover:cursor-pointer"
       data-testid="wrapper"
     >
       <span data-testid="name">

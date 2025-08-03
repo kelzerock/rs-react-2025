@@ -7,7 +7,7 @@ export const NavigationBar = () => {
   return (
     <header
       data-testid="wrapper"
-      className=" flex gap-6 bg-stone-50 p-4 rounded-md items-center relative"
+      className=" flex gap-6 bg-stone-50 dark:bg-stone-700 p-4 rounded-md items-center relative"
     >
       <img
         data-testid="logo"
@@ -16,7 +16,7 @@ export const NavigationBar = () => {
         className=" w-[50px] h-[50px] rounded-full"
       />
       <nav className="h-auto" data-testid="nav">
-        <ul className="flex rounded-md bg-stone-300 h-auto p-2 gap-2">
+        <ul className="flex rounded-md bg-stone-300 dark:bg-stone-400 h-auto p-2 gap-2">
           {Object.entries(Paths).map(([key, value]) => {
             return (
               <li key={key} className="w-full h-full sm:w-auto">
@@ -26,7 +26,7 @@ export const NavigationBar = () => {
                     const active = isActive ? " underline" : "";
                     return (
                       active +
-                      " block text-3xl font-bold bg-stone-300 rounded-md p-3 hover:bg-stone-700 hover:text-stone-200 transition-colors duration-500 capitalize"
+                      " block text-3xl font-bold bg-stone-300 dark:bg-stone-700 dark:hover:bg-stone-500 dark:text-stone-400 rounded-md p-3 hover:bg-stone-700 hover:text-stone-200 transition-colors duration-500 capitalize"
                     );
                   }}
                 >

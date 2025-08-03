@@ -40,7 +40,7 @@ export const Search = ({
       <button
         disabled={isLoading}
         type="submit"
-        className=" w-full sm:w-auto disabled:cursor-auto bg-emerald-500 text-white text-2xl py-2 px-4 rounded-md font-semibold hover:bg-emerald-600 cursor-pointer disabled:bg-gray-300 disabled:text-gray-100"
+        className=" w-full sm:w-auto disabled:cursor-auto bg-emerald-500 text-white text-2xl py-2 px-4 rounded-md font-semibold hover:bg-emerald-600 cursor-pointer disabled:bg-gray-300 disabled:text-gray-100 dark:bg-emerald-700"
         data-testid="button"
       >
         Search by name

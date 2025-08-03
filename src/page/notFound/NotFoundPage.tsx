@@ -3,8 +3,11 @@ import { Paths } from "../../models/enums/paths";
 
 export const NotFoundPage = () => {
   return (
-    <div className=" bg-blue-50 h-full p-8 " data-testid="wrapper">
-      <div className="container bg-stone-50 h-full rounded-xl p-3 flex flex-col items-center mx-auto ">
+    <div
+      className=" bg-blue-50 dark:bg-stone-700 h-full p-8 "
+      data-testid="wrapper"
+    >
+      <div className="container bg-stone-50 dark:bg-stone-300 h-full rounded-xl p-3 flex flex-col items-center mx-auto ">
         <h1
           className=" font-semibold text-4xl mt-20"
           data-testid="title-not-found-page"

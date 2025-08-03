@@ -27,7 +27,7 @@ export const ListOfCharacters = memo(function ListOfCharacters({
   );
 
   return (
-    <div className="xl:grid-cols-3 sm:col-span-2 xl:col-span-3 h-full bg-stone-50 rounded-md">
+    <div className="xl:grid-cols-3 sm:col-span-2 xl:col-span-3 h-full bg-stone-50 dark:bg-stone-700 rounded-md">
       {isLoading ? (
         <div
           className="w-full h-full flex justify-center items-center col-span-1 sm:col-span-2 xl:col-span-3"

@@ -3,14 +3,17 @@ import logo from "../../assets/rss-logo.svg";
 const AboutPage = () => {
   return (
     <div
-      className=" bg-stone-50 rounded-md p-4 grow flex flex-col gap-6"
+      className=" bg-stone-50 dark:bg-stone-700 rounded-md p-4 grow flex flex-col gap-6"
       data-testid="wrapper"
     >
-      <h1 className=" font-bold text-3xl" data-testid="title">
+      <h1
+        className=" font-bold text-3xl dark:text-stone-400"
+        data-testid="title"
+      >
         Hi, I&apos;m Aleksei
       </h1>
       <div
-        className="grid grid-cols-7 p-3 border-8 rounded-md border-stone-200 gap-4"
+        className="grid grid-cols-7 p-3 border-8 rounded-md border-stone-200 gap-4 dark:text-stone-200 dark:font-medium"
         data-testid="addition-info"
       >
         <p className=" col-span-5 text-justify">
@@ -39,7 +42,7 @@ const AboutPage = () => {
           rel="noreferrer"
           className="w-full h-full flex justify-center items-center relative"
         >
-          <span className=" font-bold text-2xl text-center">
+          <span className=" font-bold text-2xl text-center dark:text-stone-300">
             The best school for web developer
           </span>
           <img

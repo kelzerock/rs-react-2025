@@ -139,7 +139,9 @@ export const HomePage = () => {
 
   return (
     <>
-      <h1 className="p-4 text-4xl">StarTrek characters library:</h1>
+      <h1 className="p-4 text-4xl dark:text-stone-400">
+        StarTrek characters library:
+      </h1>
       <Search
         onInputChange={handleSearchInputChange}
         isLoading={isLoading}

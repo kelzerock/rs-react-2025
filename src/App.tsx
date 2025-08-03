@@ -14,7 +14,7 @@ const App = () => {
         data-theme={`${isLight ? "" : "dark"}`}
       >
         <main
-          className="bg-blue-50 rounded-2xl p-3 flex flex-col gap-2 grow dark:bg-blue-950"
+          className="bg-blue-50 rounded-2xl p-3 flex flex-col gap-2 grow dark:bg-stone-800"
           data-testid="app-main-container"
         >
           <NavigationBar />

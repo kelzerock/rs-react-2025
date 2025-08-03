@@ -1,8 +1,9 @@
-import type { MainCharacter } from "./mainCharacter";
+import type z from "zod";
 import type { Pagination } from "./pagination";
+import type { CharacterBaseZ } from "../../schema/characterBaseZ";
 
 export type StateAppComponent = {
-  characters: MainCharacter[];
+  characters: z.infer<typeof CharacterBaseZ>[];
   isLoading: boolean;
   inputSearch: string;
   isError: boolean;

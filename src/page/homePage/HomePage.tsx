@@ -14,6 +14,8 @@ import { Query } from "../../models/enums/query";
 import { RequestQuery } from "../../models/enums/requestQuery";
 import { useLS } from "../../hooks/useLS";
 import { FlyOutPanel } from "../../components/FlyOutPanel";
+import { CharacterBaseZ } from "../../schema/characterBaseZ";
+import z from "zod";
 
 export const HomePage = () => {
   const [state, setState] = useState<StateAppComponent>({
@@ -68,9 +70,10 @@ export const HomePage = () => {
         const data = await response.json();
 
         if (isResponse(data)) {
+          const characters = z.array(CharacterBaseZ).parse(data.characters);
           setState((prev) => ({
             ...prev,
-            characters: data.characters,
+            characters: characters,
             page: data.page,
             isLoading: false,
           }));

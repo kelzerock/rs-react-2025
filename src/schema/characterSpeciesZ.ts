@@ -1,8 +1,8 @@
 import z from "zod";
 
 export const CharacterSpeciesZ = z.object({
-  uid: z.string().optional(),
-  name: z.string().optional(),
-  numerator: z.number().optional(),
-  denominator: z.number().optional(),
+  uid: z.string().nullable().optional(),
+  name: z.string().nullable().optional(),
+  numerator: z.number().nullable().optional(),
+  denominator: z.number().nullable().optional(),
 });

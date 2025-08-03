@@ -1,16 +1,17 @@
 import { memo, useCallback } from "react";
-import type { MainCharacter } from "../models/types/mainCharacter";
 import { Character } from "./Character";
 import { useSearchParams } from "react-router";
 import { GridLoader } from "react-spinners";
 import { Title } from "./helperComponent/Title";
 import { Query } from "../models/enums/query";
+import type z from "zod";
+import type { CharacterBaseZ } from "../schema/characterBaseZ";
 
 export const ListOfCharacters = memo(function ListOfCharacters({
   characters,
   isLoading,
 }: {
-  characters: MainCharacter[];
+  characters: z.infer<typeof CharacterBaseZ>[];
   isLoading: boolean;
 }) {
   const [searchParams, setSearchParams] = useSearchParams();

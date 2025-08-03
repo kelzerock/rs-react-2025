@@ -7,11 +7,13 @@ export const CharacterRelationZ = z.object({
       uid: z.string(),
       name: z.string(),
     })
+    .nullable()
     .optional(),
   target: z
     .object({
       uid: z.string(),
       name: z.string(),
     })
+    .nullable()
     .optional(),
 });

@@ -1,6 +1,5 @@
 import { LocalStorageKey } from "../../models/enums/localStorageKey";
 import { Search } from "../../components/Search";
-import { CrashComponent } from "../../components/CrashComponent";
 import { ListOfCharacters } from "../../components/ListOfCharacters";
 import { CharacterInfo } from "../../components/CharacterInfo";
 import { PaginationSection } from "../../components/Pagination";
@@ -15,17 +14,18 @@ export const HomePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [savedSearch, setSavedSearch] = useLS(LocalStorageKey.inputData, "");
   const [inputSearch, setInputSearch] = useState(savedSearch);
+  const [forceRequest, setForceRequest] = useState(false);
 
   const page = searchParams.get(Query.PAGE) || "1";
   const details = searchParams.get(Query.DETAILS);
   const newPage = (parseFloat(page) - 1).toString();
 
-  const { data, isFetching, isError } = useGetCharactersQuery(
+  const { data, isFetching, error } = useGetCharactersQuery(
     {
       params: newPage,
       search: inputSearch,
     },
-    { skip: newPage === null },
+    { skip: newPage === null, refetchOnMountOrArgChange: forceRequest },
   );
 
   useEffect(() => {
@@ -46,28 +46,69 @@ export const HomePage = () => {
     setSearchParams(newParams);
   };
 
+  const handleClick = () => {
+    setForceRequest(!forceRequest);
+  };
+
+  let errorBlock = null;
+
+  if (error) {
+    const stub = "information absent";
+    let message = "";
+    let status:
+      | number
+      | "FETCH_ERROR"
+      | "PARSING_ERROR"
+      | "TIMEOUT_ERROR"
+      | "CUSTOM_ERROR"
+      | null = null;
+    let errMes = "";
+    if ("message" in error) {
+      message = error.message || "";
+    }
+    if ("status" in error) {
+      errMes = "error" in error ? error.error : JSON.stringify(error.data);
+      status = error.status;
+    }
+    errorBlock = (
+      <div className="w-full h-full bg-stone-100 p-2">
+        <div className=" text-2xl font-semibold">An error has occurred:</div>
+        <div>message: {message || stub}</div>
+        <div>status: {status || stub}</div>
+        <div>data: {errMes || stub}</div>
+      </div>
+    );
+  }
+
   return (
     <>
       <h1 className="p-4 text-4xl dark:text-stone-400">
         StarTrek characters library:
       </h1>
-
+      <button
+        onClick={handleClick}
+        className="bg-stone-300 hover:cursor-pointer hover:bg-stone-400 transition-colors duration-300 p-1 rounded-md hover:text-stone-50"
+      >
+        Force fetching: {forceRequest ? "on" : "off"}
+      </button>
       <Search
         onInputChange={handleSearchInputChange}
         isLoading={isFetching}
         initialValue={inputSearch}
       />
 
-      {isError && <CrashComponent />}
-
-      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2 items-start grow relative">
-        <ListOfCharacters
-          characters={data?.characters ?? []}
-          isLoading={isFetching}
-        />
-        <CharacterInfo />
-        <FlyOutPanel />
-      </div>
+      {errorBlock ? (
+        errorBlock
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2 items-start grow relative">
+          <ListOfCharacters
+            characters={data?.characters ?? []}
+            isLoading={isFetching}
+          />
+          <CharacterInfo forceFetching={forceRequest} />
+          <FlyOutPanel />
+        </div>
+      )}
 
       {data?.page && (
         <PaginationSection isLoading={isFetching} page={data.page} />

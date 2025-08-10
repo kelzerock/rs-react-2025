@@ -1,4 +1,4 @@
-import { useEffect, useState, type JSX } from "react";
+import { useEffect, useState, type FC, type JSX } from "react";
 import { useSearchParams } from "react-router";
 import { GridLoader } from "react-spinners";
 import { Title } from "./helperComponent/Title";
@@ -6,7 +6,9 @@ import { CloseIcon } from "./helperComponent/CloseIcon";
 import { Query } from "../models/enums/query";
 import { useGetSingleCharacterQuery } from "../serviceAPI/stapiAPI";
 
-export const CharacterInfo = () => {
+export const CharacterInfo: FC<{ forceFetching: boolean }> = ({
+  forceFetching,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -14,7 +16,7 @@ export const CharacterInfo = () => {
 
   const { data, isFetching } = useGetSingleCharacterQuery(
     { params: details },
-    { skip: details === null },
+    { skip: details === null, refetchOnMountOrArgChange: forceFetching },
   );
   const handleClose = () => {
     if (searchParams.has(Query.DETAILS)) {

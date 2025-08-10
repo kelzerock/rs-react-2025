@@ -13,16 +13,14 @@ export const stapiAPI = createApi({
       MainResponse,
       { search: string | null; params?: string | null }
     >({
-      query: ({ search, params }) => {
-        return {
-          url: `/search?pageSize=9${params ? "&" + RequestQuery.PAGE + "=" + params : ""}`,
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-          },
-          body: new URLSearchParams({ name: search || "" }),
-        };
-      },
+      query: ({ search, params }) => ({
+        url: `/search?pageSize=9${params ? "&" + RequestQuery.PAGE + "=" + params : ""}`,
+        method: "POST",
+        headers: {
+          // "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+        body: new URLSearchParams({ name: search || "" }),
+      }),
     }),
     getSingleCharacter: build.query<
       {

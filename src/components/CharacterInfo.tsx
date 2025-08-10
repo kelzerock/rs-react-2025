@@ -1,7 +1,6 @@
-import { useMemo, useState, type JSX } from "react";
+import { useEffect, useState, type JSX } from "react";
 import { useSearchParams } from "react-router";
 import { GridLoader } from "react-spinners";
-import { RequestQuery } from "../models/enums/requestQuery";
 import { Title } from "./helperComponent/Title";
 import { CloseIcon } from "./helperComponent/CloseIcon";
 import { Query } from "../models/enums/query";
@@ -11,17 +10,12 @@ export const CharacterInfo = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const page = searchParams.get(Query.PAGE);
   const details = searchParams.get(Query.DETAILS);
 
-  const queries = useMemo(() => {
-    const params = new URLSearchParams();
-    if (details) params.set(RequestQuery.ID, details);
-    return params;
-  }, [page, details]);
-  console.log({ queries });
-  const { data, isLoading } = useGetSingleCharacterQuery({ params: queries });
-  console.log({ data });
+  const { data, isFetching } = useGetSingleCharacterQuery(
+    { params: details },
+    { skip: details === null },
+  );
   const handleClose = () => {
     if (searchParams.has(Query.DETAILS)) {
       searchParams.delete(Query.DETAILS);
@@ -30,32 +24,11 @@ export const CharacterInfo = () => {
     setIsOpen(false);
   };
 
-  // useEffect(() => {
-  //   if (details) {
-  //     setIsOpen(true);
-  //     const startFetch = async () => {
-  //       const queries = new URLSearchParams();
-  //       queries.set(RequestQuery.ID, details);
-  //       const response = await requestAPI({
-  //         method: Methods.GET,
-  //         queries,
-  //       });
-  //       if (!response.ok) {
-  //         setInfoAboutCharacter(null);
-  //         setIsOpen(false);
-  //         return;
-  //       }
-
-  //       const data = await response.json();
-  //       setInfoAboutCharacter(data.character);
-  //     };
-
-  //     startFetch();
-  //   } else {
-  //     setIsOpen(false);
-  //     setInfoAboutCharacter(null);
-  //   }
-  // }, [details]);
+  useEffect(() => {
+    if (data?.character || isFetching) {
+      setIsOpen(true);
+    }
+  }, [data, isFetching]);
 
   const isObjectRecord = (value: unknown): value is Record<string, unknown> =>
     typeof value === "object" && value !== null && !Array.isArray(value);
@@ -102,12 +75,12 @@ export const CharacterInfo = () => {
     });
   };
 
-  const openInfo = isLoading ? (
+  const openInfo = isFetching ? (
     <div
       className="w-full h-full flex justify-center items-center"
       role="status"
     >
-      <GridLoader className="" />
+      <GridLoader />
     </div>
   ) : (
     <div className="relative border-8 border-amber-50 rounded-2xl bg-amber-50 w-full">

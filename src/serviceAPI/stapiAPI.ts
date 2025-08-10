@@ -14,7 +14,6 @@ export const stapiAPI = createApi({
       { search: string | null; params?: string | null }
     >({
       query: ({ search, params }) => {
-        console.log("rtk query work");
         return {
           url: `/search?pageSize=9${params ? "&" + RequestQuery.PAGE + "=" + params : ""}`,
           method: "POST",
@@ -29,10 +28,10 @@ export const stapiAPI = createApi({
       {
         character: z.infer<typeof CharacterFullZ>;
       },
-      { params?: URLSearchParams | null }
+      { params?: string | null }
     >({
       query: ({ params }) => ({
-        url: `${params?.toString() ? "?" + params.toString() : ""}`,
+        url: `${params ? "?uid=" + params : ""}`,
         method: "GET",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",

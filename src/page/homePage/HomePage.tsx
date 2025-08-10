@@ -20,19 +20,12 @@ export const HomePage = () => {
   const details = searchParams.get(Query.DETAILS);
   const newPage = (parseFloat(page) - 1).toString();
 
-  // const queryParams = useMemo(() => {
-  //   // const newParams = new URLSearchParams();
-  //   // newParams.set(RequestQuery.PAGE, newPage);
-  //   return {
-  //     search: inputSearch,
-  //     params: newPage,
-  //   };
-  // }, [inputSearch, page]);
-  const { data, isLoading, isError } = useGetCharactersQuery(
-    { params: newPage, search: inputSearch },
+  const { data, isFetching, isError } = useGetCharactersQuery(
     {
-      refetchOnMountOrArgChange: true,
+      params: newPage,
+      search: inputSearch,
     },
+    { skip: newPage === null },
   );
 
   useEffect(() => {
@@ -61,7 +54,7 @@ export const HomePage = () => {
 
       <Search
         onInputChange={handleSearchInputChange}
-        isLoading={isLoading}
+        isLoading={isFetching}
         initialValue={inputSearch}
       />
 
@@ -70,14 +63,14 @@ export const HomePage = () => {
       <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2 items-start grow relative">
         <ListOfCharacters
           characters={data?.characters ?? []}
-          isLoading={isLoading}
+          isLoading={isFetching}
         />
         <CharacterInfo />
         <FlyOutPanel />
       </div>
 
       {data?.page && (
-        <PaginationSection isLoading={isLoading} page={data.page} />
+        <PaginationSection isLoading={isFetching} page={data.page} />
       )}
     </>
   );

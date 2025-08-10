@@ -1,14 +1,14 @@
 import { useSearchParams } from "react-router";
-import type { StateAppComponent } from "../models/types/stateAppComponent";
 import { Query } from "../models/enums/query";
 import { memo } from "react";
+import type { Pagination } from "../models/types/pagination";
 
 export const PaginationSection = memo(function PaginationSection({
   isLoading,
   page,
 }: {
   isLoading: boolean;
-  page: StateAppComponent["page"];
+  page: Pagination;
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
   if (!page) return;

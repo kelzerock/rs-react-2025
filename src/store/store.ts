@@ -9,7 +9,9 @@ export const store = configureStore({
     [stapiAPI.reducerPath]: stapiAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(stapiAPI.middleware),
+    getDefaultMiddleware({ serializableCheck: false }).concat(
+      stapiAPI.middleware,
+    ),
 });
 
 setupListeners(store.dispatch);

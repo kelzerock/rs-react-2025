@@ -28,7 +28,6 @@ export const HomePage = () => {
   //     params: newPage,
   //   };
   // }, [inputSearch, page]);
-  console.log({ newPage });
   const { data, isLoading, isError } = useGetCharactersQuery(
     { params: newPage, search: inputSearch },
     {

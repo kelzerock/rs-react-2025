@@ -11,7 +11,7 @@ export const ListOfCharacters = memo(function ListOfCharacters({
   characters,
   isLoading,
 }: {
-  characters: z.infer<typeof CharacterBaseZ>[];
+  characters: z.infer<typeof CharacterBaseZ>[] | undefined;
   isLoading: boolean;
 }) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -36,7 +36,7 @@ export const ListOfCharacters = memo(function ListOfCharacters({
         >
           <GridLoader size="40px" />
         </div>
-      ) : characters.length === 0 ? (
+      ) : !characters || characters.length === 0 ? (
         <Title title="Characters are absent" />
       ) : (
         <ul className="p-2 rounded-2xl gap-2 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-start auto-rows-fr">

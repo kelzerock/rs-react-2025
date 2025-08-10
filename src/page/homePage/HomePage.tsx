@@ -6,11 +6,10 @@ import { CharacterInfo } from "../../components/CharacterInfo";
 import { PaginationSection } from "../../components/Pagination";
 import { useSearchParams } from "react-router";
 import { Query } from "../../models/enums/query";
-import { RequestQuery } from "../../models/enums/requestQuery";
 import { useLS } from "../../hooks/useLS";
 import { FlyOutPanel } from "../../components/FlyOutPanel";
 import { useGetCharactersQuery } from "../../serviceAPI/stapiAPI";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 export const HomePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -19,19 +18,33 @@ export const HomePage = () => {
 
   const page = searchParams.get(Query.PAGE) || "1";
   const details = searchParams.get(Query.DETAILS);
+  const newPage = (parseFloat(page) - 1).toString();
 
-  const queries = useMemo(() => {
-    const params = new URLSearchParams();
-    params.set(RequestQuery.PAGE, String(parseInt(page) - 1));
-    if (details) params.set(Query.DETAILS, details);
-    return params;
-  }, [page, details]);
+  // const queryParams = useMemo(() => {
+  //   // const newParams = new URLSearchParams();
+  //   // newParams.set(RequestQuery.PAGE, newPage);
+  //   return {
+  //     search: inputSearch,
+  //     params: newPage,
+  //   };
+  // }, [inputSearch, page]);
+  console.log({ newPage });
+  const { data, isLoading, isError } = useGetCharactersQuery(
+    { params: newPage, search: inputSearch },
+    {
+      refetchOnMountOrArgChange: true,
+    },
+  );
 
-  const { data, isLoading, isError } = useGetCharactersQuery({
-    search: inputSearch,
-    params: queries,
-  });
-  console.log({ data, isLoading });
+  useEffect(() => {
+    const newParams = new URLSearchParams();
+    const page = searchParams.get(Query.PAGE) || "1";
+    const details = searchParams.get(Query.DETAILS);
+    newParams.set(Query.PAGE, page);
+    if (details) newParams.set(Query.DETAILS, details);
+    setSearchParams(newParams);
+  }, [data]);
+
   const handleSearchInputChange = (value: string): void => {
     setInputSearch(value);
     setSavedSearch(value);

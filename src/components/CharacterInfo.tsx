@@ -1,23 +1,27 @@
-import { useEffect, useState, type JSX } from "react";
+import { useMemo, useState, type JSX } from "react";
 import { useSearchParams } from "react-router";
-import { requestAPI } from "../utils/requestAPI";
-import { Methods } from "../models/enums/methods";
 import { GridLoader } from "react-spinners";
 import { RequestQuery } from "../models/enums/requestQuery";
 import { Title } from "./helperComponent/Title";
 import { CloseIcon } from "./helperComponent/CloseIcon";
 import { Query } from "../models/enums/query";
+import { useGetSingleCharacterQuery } from "../serviceAPI/stapiAPI";
 
 export const CharacterInfo = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [infoAboutCharacter, setInfoAboutCharacter] = useState<Record<
-    string,
-    unknown
-  > | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const page = searchParams.get(Query.PAGE);
   const details = searchParams.get(Query.DETAILS);
 
+  const queries = useMemo(() => {
+    const params = new URLSearchParams();
+    if (details) params.set(RequestQuery.ID, details);
+    return params;
+  }, [page, details]);
+  console.log({ queries });
+  const { data, isLoading } = useGetSingleCharacterQuery({ params: queries });
+  console.log({ data });
   const handleClose = () => {
     if (searchParams.has(Query.DETAILS)) {
       searchParams.delete(Query.DETAILS);
@@ -26,34 +30,32 @@ export const CharacterInfo = () => {
     setIsOpen(false);
   };
 
-  useEffect(() => {
-    if (details) {
-      setIsOpen(true);
-      const startFetch = async () => {
-        const queries = new URLSearchParams();
-        queries.set(RequestQuery.ID, details);
-        const response = await requestAPI({
-          method: Methods.GET,
-          queries,
-        });
-        setIsLoading(false);
-        if (!response.ok) {
-          setInfoAboutCharacter(null);
-          setIsOpen(false);
-          return;
-        }
+  // useEffect(() => {
+  //   if (details) {
+  //     setIsOpen(true);
+  //     const startFetch = async () => {
+  //       const queries = new URLSearchParams();
+  //       queries.set(RequestQuery.ID, details);
+  //       const response = await requestAPI({
+  //         method: Methods.GET,
+  //         queries,
+  //       });
+  //       if (!response.ok) {
+  //         setInfoAboutCharacter(null);
+  //         setIsOpen(false);
+  //         return;
+  //       }
 
-        const data = await response.json();
-        setInfoAboutCharacter(data.character);
-      };
-      setIsLoading(true);
+  //       const data = await response.json();
+  //       setInfoAboutCharacter(data.character);
+  //     };
 
-      startFetch();
-    } else {
-      setIsOpen(false);
-      setInfoAboutCharacter(null);
-    }
-  }, [details]);
+  //     startFetch();
+  //   } else {
+  //     setIsOpen(false);
+  //     setInfoAboutCharacter(null);
+  //   }
+  // }, [details]);
 
   const isObjectRecord = (value: unknown): value is Record<string, unknown> =>
     typeof value === "object" && value !== null && !Array.isArray(value);
@@ -113,10 +115,7 @@ export const CharacterInfo = () => {
         <h4 className=" font-bold text-2xl" data-testid="main-title">
           CharacterInfo
         </h4>
-        {infoAboutCharacter &&
-          infoAboutCharacter !== null &&
-          typeof infoAboutCharacter === "object" &&
-          renderCharacterInfo(infoAboutCharacter)}
+        {data && renderCharacterInfo(data.character)}
         <CloseIcon onClick={handleClose} />
       </div>
     </div>

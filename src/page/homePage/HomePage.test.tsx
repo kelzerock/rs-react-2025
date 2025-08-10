@@ -20,13 +20,24 @@ test("renders title and search component", () => {
 describe("test error at component", () => {
   beforeEach(() => {
     vi.resetModules();
-    vi.mock("../../utils/requestAPI", () => ({
-      requestAPI: vi.fn().mockResolvedValue({
-        ok: false,
-        status: 500,
-        json: async () => ({}),
-      }),
-    }));
+    vi.mock("../../serviceAPI/stapiAPI", async () => {
+      const actual = await vi.importActual<
+        typeof import("../../serviceAPI/stapiAPI")
+      >("../../serviceAPI/stapiAPI");
+
+      return {
+        ...actual,
+        useGetCharactersQuery: vi.fn().mockReturnValue({
+          data: undefined,
+          isError: true,
+          isFetching: false,
+          error: {
+            status: 500,
+            data: { message: "Internal Server Error" },
+          },
+        }),
+      };
+    });
   });
 
   test("shows error message when API request fails", async () => {
@@ -39,8 +50,9 @@ describe("test error at component", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId("error-message")).toHaveTextContent(
-        "Error connecting to API. Status code: 500",
+      expect(screen.getByTestId("error-status")).toHaveTextContent("500");
+      expect(screen.getByTestId("error-data")).toHaveTextContent(
+        "Internal Server Error",
       );
     });
   });

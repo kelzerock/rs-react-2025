@@ -73,9 +73,9 @@ export const HomePage = () => {
     errorBlock = (
       <div className="w-full h-full bg-stone-100 p-2">
         <div className=" text-2xl font-semibold">An error has occurred:</div>
-        <div>message: {message || stub}</div>
-        <div>status: {status || stub}</div>
-        <div>data: {errMes || stub}</div>
+        <div data-testid="error-msg">message: {message || stub}</div>
+        <div data-testid="error-status">status: {status || stub}</div>
+        <div data-testid="error-data">data: {errMes || stub}</div>
       </div>
     );
   }

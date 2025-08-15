@@ -1,7 +1,10 @@
-import { NavLink } from "react-router";
+"use client";
+
 import { Paths } from "../models/enums/paths";
-import logo from "../assets/logo.webp";
-import { ThemePanel } from "./ThemePanel";
+import logo from "../../public/assets/logo.webp";
+// import { ThemePanel } from "./ThemePanel";
+import Image from "next/image";
+import Link from "next/link";
 
 export const NavigationBar = () => {
   return (
@@ -9,7 +12,7 @@ export const NavigationBar = () => {
       data-testid="wrapper"
       className=" flex gap-6 bg-stone-50 dark:bg-stone-700 p-4 rounded-md items-center relative"
     >
-      <img
+      <Image
         data-testid="logo"
         src={logo}
         alt="logo star trek"
@@ -20,24 +23,18 @@ export const NavigationBar = () => {
           {Object.entries(Paths).map(([key, value]) => {
             return (
               <li key={key} className="w-full h-full sm:w-auto">
-                <NavLink
-                  to={value}
-                  className={({ isActive }) => {
-                    const active = isActive ? " underline" : "";
-                    return (
-                      active +
-                      " block text-3xl font-bold bg-stone-300 dark:bg-stone-700 dark:hover:bg-stone-500 dark:text-stone-400 rounded-md p-3 hover:bg-stone-700 hover:text-stone-200 transition-colors duration-500 capitalize"
-                    );
-                  }}
+                <Link
+                  href={value}
+                  className="block text-3xl font-bold bg-stone-300 dark:bg-stone-700 dark:hover:bg-stone-500 dark:text-stone-400 rounded-md p-3 hover:bg-stone-700 hover:text-stone-200 transition-colors duration-500 capitalize"
                 >
                   {key}
-                </NavLink>
+                </Link>
               </li>
             );
           })}
         </ul>
       </nav>
-      <ThemePanel />
+      {/* <ThemePanel /> */}
     </header>
   );
 };

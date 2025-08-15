@@ -3,19 +3,23 @@ import itemsReducer from "./itemsSlice";
 import { stapiAPI } from "../serviceAPI/stapiAPI";
 import { setupListeners } from "@reduxjs/toolkit/query/react";
 
-export const store = configureStore({
-  reducer: {
-    items: itemsReducer,
-    [stapiAPI.reducerPath]: stapiAPI.reducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }).concat(
-      stapiAPI.middleware,
-    ),
-});
+export const store = () => {
+  return configureStore({
+    reducer: {
+      items: itemsReducer,
+      [stapiAPI.reducerPath]: stapiAPI.reducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({ serializableCheck: false }).concat(
+        stapiAPI.middleware,
+      ),
+  });
+};
 
-setupListeners(store.dispatch);
+setupListeners(store().dispatch);
 
-export type RootState = ReturnType<typeof store.getState>;
+export type AppStore = ReturnType<typeof store>;
 
-export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<AppStore["getState"]>;
+
+export type AppDispatch = AppStore["dispatch"];

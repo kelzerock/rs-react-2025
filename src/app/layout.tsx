@@ -1,7 +1,8 @@
 import { Footer } from "@/components/Footer";
-// import { NavigationBar } from "@/components/NavigationBar";
+import { NavigationBar } from "@/components/NavigationBar";
 import type { Metadata } from "next";
 import "./global.css";
+import StoreProvider from "./StoreProvider";
 
 export const metadata: Metadata = {
   title: "Star trek",
@@ -42,8 +43,10 @@ export default function RootLayout({
             className="bg-blue-50 rounded-2xl p-3 flex flex-col gap-2 grow dark:bg-stone-800"
             data-testid="app-main-container"
           >
-            {/* <NavigationBar /> */}
-            {children}
+            <StoreProvider>
+              <NavigationBar />
+              {children}
+            </StoreProvider>
           </main>
           <Footer />
         </div>

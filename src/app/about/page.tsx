@@ -1,4 +1,5 @@
-import logo from "../../assets/rss-logo.svg";
+import Image from "next/image";
+import logo from "../../../public/assets/rss-logo.svg";
 
 const AboutPage = () => {
   return (
@@ -45,7 +46,7 @@ const AboutPage = () => {
           <span className=" font-bold text-2xl text-center dark:text-stone-300">
             The best school for web developer
           </span>
-          <img
+          <Image
             src={logo}
             alt="Logo Rsschool"
             className=" max-w-3/4 max-h-3/4 opacity-15 absolute"

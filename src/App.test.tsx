@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import App from "./App";
+import App from "./app/page";
 import { BrowserRouter } from "react-router";
 import { Provider } from "react-redux";
 import { store } from "./store/store";

@@ -1,5 +1,6 @@
 import { LINK_TO_GITHUB, LINK_TO_RS } from "../constant/global-constant";
-import logo from "../assets/rss-logo.svg";
+import Image from "next/image";
+import logo from "../../public/assets/rss-logo.svg";
 
 export const Footer = () => {
   return (
@@ -21,7 +22,8 @@ export const Footer = () => {
         data-testid="link-to-rsschool"
       >
         <span>RSSchool 2025 react</span>
-        <img src={logo} alt="logo rsschool" className="w-[24px] h-auto" />
+
+        <Image src={logo} alt="logo rsschool" className="w-[24px] h-auto" />
       </a>
     </footer>
   );

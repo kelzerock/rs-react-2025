@@ -9,5 +9,9 @@ interface ThemeWrapperProps {
 export const ThemeWrapper = ({ children }: ThemeWrapperProps) => {
   const { isLight } = useThemeContext();
 
-  return <div data-theme={isLight ? "light" : "dark"}>{children}</div>;
+  return (
+    <div data-theme={isLight ? "light" : "dark"} className="h-full">
+      {children}
+    </div>
+  );
 };

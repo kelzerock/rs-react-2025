@@ -9,5 +9,9 @@
     "paragraph-2": "I care a lot about accessibility, responsive design, and writing code that's easy to understand (for humans and machines). Whether it's debugging something gnarly in the browser or improving how feedback gets delivered in the UI, I like solving problems that actually make things better.",
     "paragraph-3": "Still exploring, still learning — and always up for building things that people actually enjoy using.Still exploring, still learning — and always up for building things that people actually enjoy using.",
     "rsschool": "The best school for web developer"
+  },
+  "Error": {
+    "title": "404 - Page Not Found",
+    "button": "Back to main page"
   }
 }

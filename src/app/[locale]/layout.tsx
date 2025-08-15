@@ -5,7 +5,7 @@ import StoreProvider from "../StoreProvider";
 import { ThemeProvider } from "@/context/themeProvider";
 import { ThemeWrapper } from "@/components/ThemeWrapper";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import "../global.css";
+// import "../global.css";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import logo from "../../../public/assets/rss-logo.svg";
+import logo from "../../../../public/assets/rss-logo.svg";
 
 const AboutPage = () => {
   return (

@@ -1,4 +1,4 @@
 export const Paths = {
   home: "/",
-  about: "about",
+  about: "/about",
 } as const;

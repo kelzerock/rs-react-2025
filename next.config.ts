@@ -4,7 +4,7 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
-  distDir: "./dist", // Changes the build output directory to `./dist/`.
+  distDir: "./dist",
   experimental: {
     optimizePackageImports: ["tailwindcss"],
   },

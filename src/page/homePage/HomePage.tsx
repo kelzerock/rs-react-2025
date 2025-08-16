@@ -17,8 +17,15 @@ export const HomePage = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [savedSearch, setSavedSearch] = useLS(LocalStorageKey.inputData, "");
-  const [inputSearch, setInputSearch] = useState(savedSearch);
+  const [inputSearch, setInputSearch] = useState("");
   const [forceRequest, setForceRequest] = useState(false);
+
+  // Обновляем inputSearch когда savedSearch загружается из localStorage
+  useEffect(() => {
+    if (savedSearch !== undefined) {
+      setInputSearch(savedSearch);
+    }
+  }, [savedSearch]);
 
   const page = searchParams.get(Query.PAGE) || "1";
   const details = searchParams.get(Query.DETAILS);

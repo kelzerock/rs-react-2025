@@ -9,9 +9,9 @@ export default async function LocaleHomePage() {
     },
     body: new URLSearchParams({ name: "" }),
   });
+
   if (response.ok) {
-    const data = await response.json();
-    console.log({ data });
+    await response.json();
   }
   return <HomePage />;
 }

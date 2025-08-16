@@ -17,7 +17,7 @@ export const stapiAPI = createApi({
         url: `/search?pageSize=9${params ? "&" + RequestQuery.PAGE + "=" + params : ""}`,
         method: "POST",
         headers: {
-          // "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         },
         body: new URLSearchParams({ name: search || "" }),
       }),

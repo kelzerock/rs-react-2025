@@ -1,12 +1,14 @@
 import { useAppDispatch, useAppSelector } from "../hooks/appHook";
 import { removeAllItems } from "../store/itemsSlice";
-import { downloadCSVFile } from "../utils/downloadCVSFile";
+import { useDownloadCSV } from "../hooks/useDownloadCSV";
 
 export const FlyOutPanel = () => {
   const items = useAppSelector((state) => state.items);
   const dispatch = useAppDispatch();
+  const { downloadCSV, isDownloading, error } = useDownloadCSV();
+
   const handleClickDownload = () => {
-    downloadCSVFile(items);
+    downloadCSV(items);
   };
 
   const countItems = items.length;
@@ -20,6 +22,9 @@ export const FlyOutPanel = () => {
         <span data-testid="flyOutPanel-countItems">
           Selected items: {countItems}
         </span>
+        {error && (
+          <div className="text-red-400 text-sm mt-1">Error: {error}</div>
+        )}
         <div className="flex flex-col sm:flex-row gap-3">
           <button
             type="button"
@@ -30,10 +35,11 @@ export const FlyOutPanel = () => {
           </button>
           <button
             type="button"
-            className="bg-stone-200 text-stone-800 px-3 rounded-md hover:cursor-pointer hover:bg-stone-400 transition-all duration-300 hover:text-stone-50"
+            className="bg-stone-200 text-stone-800 px-3 rounded-md hover:cursor-pointer hover:bg-stone-400 transition-all duration-300 hover:text-stone-50 disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleClickDownload}
+            disabled={isDownloading}
           >
-            save selected items
+            {isDownloading ? "Downloading..." : "save selected items"}
           </button>
         </div>
       </div>

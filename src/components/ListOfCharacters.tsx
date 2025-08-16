@@ -1,4 +1,4 @@
-import { memo, useCallback } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { Character } from "./Character";
 import { GridLoader } from "react-spinners";
 import { Title } from "./helperComponent/Title";
@@ -18,6 +18,11 @@ export const ListOfCharacters = memo(function ListOfCharacters({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleClick = useCallback(
     (id: string) => {
@@ -37,7 +42,7 @@ export const ListOfCharacters = memo(function ListOfCharacters({
           className="w-full h-full flex justify-center items-center col-span-1 sm:col-span-2 xl:col-span-3"
           role="status"
         >
-          <GridLoader size="40px" />
+          {mounted ? <GridLoader size={40} /> : <div className="w-10 h-10" />}
         </div>
       ) : !characters || characters.length === 0 ? (
         <Title title="Characters are absent" />

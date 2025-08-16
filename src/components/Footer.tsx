@@ -1,6 +1,7 @@
 import { LINK_TO_GITHUB, LINK_TO_RS } from "../constant/global-constant";
 import Image from "next/image";
 import logo from "../../public/assets/rss-logo.svg";
+import { Link } from "@/i18n/navigation";
 
 export const Footer = () => {
   return (
@@ -8,23 +9,13 @@ export const Footer = () => {
       className="flex justify-evenly items-center bg-gray-300 p-4 font-semibold text-xl rounded-2xl"
       data-testid="footer"
     >
-      <a
-        href={LINK_TO_GITHUB}
-        target="_blank"
-        rel="noreferrer"
-        data-testid="link-to-author"
-      >
+      <Link href={LINK_TO_GITHUB} target="_blank" rel="noreferrer">
         created by <span>Aleksei Zhuchkov</span>
-      </a>
-      <a
-        href={LINK_TO_RS}
-        className="flex gap-1.5"
-        data-testid="link-to-rsschool"
-      >
+      </Link>
+      <Link href={LINK_TO_RS} className="flex gap-1.5">
         <span>RSSchool 2025 react</span>
-
         <Image src={logo} alt="logo rsschool" className="w-[24px] h-auto" />
-      </a>
+      </Link>
     </footer>
   );
 };

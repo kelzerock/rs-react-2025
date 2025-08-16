@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState, type FC, type JSX } from "react";
 import { GridLoader } from "react-spinners";
 import { Title } from "./helperComponent/Title";

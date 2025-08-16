@@ -1,6 +1,7 @@
 import Image from "next/image";
 import logo from "../../../../public/assets/rss-logo.svg";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 const AboutPage = () => {
   const t = useTranslations("About");
@@ -28,7 +29,7 @@ const AboutPage = () => {
         </p>
       </div>
       <div className="border-8 rounded-md border-stone-200 gap-4 grow ">
-        <a
+        <Link
           href="https://rs.school/"
           target="_blank"
           rel="noreferrer"
@@ -43,7 +44,7 @@ const AboutPage = () => {
             className=" max-w-3/4 max-h-3/4 opacity-15 absolute"
             data-testid="logo-rs"
           />
-        </a>
+        </Link>
       </div>
     </div>
   );

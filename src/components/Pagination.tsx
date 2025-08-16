@@ -1,7 +1,8 @@
-import { useSearchParams } from "react-router";
 import { Query } from "../models/enums/query";
 import { memo } from "react";
 import type { Pagination } from "../models/types/pagination";
+import { usePathname, useRouter } from "@/i18n/navigation";
+import { useSearchParams } from "next/navigation";
 
 export const PaginationSection = memo(function PaginationSection({
   isLoading,
@@ -10,15 +11,17 @@ export const PaginationSection = memo(function PaginationSection({
   isLoading: boolean;
   page: Pagination;
 }) {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   if (!page) return;
   const { pageNumber, totalPages, firstPage, lastPage } = page;
   const OFFSET = 1;
 
   const changeUrlPage = (page: string) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams.toString());
     params.set(Query.PAGE, page);
-    setSearchParams(params);
+    router.replace(`${pathname}?${params.toString()}`);
   };
 
   const handlePrevButton = () => {

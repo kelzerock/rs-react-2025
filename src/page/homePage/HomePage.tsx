@@ -1,17 +1,21 @@
+"use client";
 import { LocalStorageKey } from "../../models/enums/localStorageKey";
 import { Search } from "../../components/Search";
 import { ListOfCharacters } from "../../components/ListOfCharacters";
 import { CharacterInfo } from "../../components/CharacterInfo";
 import { PaginationSection } from "../../components/Pagination";
-import { useSearchParams } from "react-router";
 import { Query } from "../../models/enums/query";
 import { useLS } from "../../hooks/useLS";
 import { FlyOutPanel } from "../../components/FlyOutPanel";
 import { useGetCharactersQuery } from "../../serviceAPI/stapiAPI";
 import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "@/i18n/navigation";
+import { useSearchParams } from "next/navigation";
 
 export const HomePage = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [savedSearch, setSavedSearch] = useLS(LocalStorageKey.inputData, "");
   const [inputSearch, setInputSearch] = useState(savedSearch);
   const [forceRequest, setForceRequest] = useState(false);
@@ -28,13 +32,19 @@ export const HomePage = () => {
     { skip: newPage === null, refetchOnMountOrArgChange: forceRequest },
   );
 
+  const setQueryParam = (newParams: URLSearchParams) => {
+    router.replace(`${pathname}?${newParams.toString()}`, {
+      scroll: false,
+    });
+  };
+
   useEffect(() => {
     const newParams = new URLSearchParams();
     const page = searchParams.get(Query.PAGE) || "1";
     const details = searchParams.get(Query.DETAILS);
     newParams.set(Query.PAGE, page);
     if (details) newParams.set(Query.DETAILS, details);
-    setSearchParams(newParams);
+    setQueryParam(newParams);
   }, [data]);
 
   const handleSearchInputChange = (value: string): void => {
@@ -43,7 +53,7 @@ export const HomePage = () => {
     const newParams = new URLSearchParams();
     newParams.set(Query.PAGE, "1");
     if (details) newParams.set(Query.DETAILS, details);
-    setSearchParams(newParams);
+    setQueryParam(newParams);
   };
 
   const handleClick = () => {

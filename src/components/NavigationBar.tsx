@@ -6,12 +6,14 @@ import { ThemePanel } from "./ThemePanel";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, Link } from "@/i18n/navigation";
+import { useSearchParams } from "next/navigation";
 
 export const NavigationBar = () => {
   const t = useTranslations("NavigationBar");
   const locale = useLocale();
   const pathname = usePathname();
-
+  const searchParams = useSearchParams();
+  console.log({ pathname, searchParams });
   return (
     <header
       data-testid="wrapper"

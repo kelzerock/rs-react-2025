@@ -1,11 +1,12 @@
 import { memo, useCallback } from "react";
 import { Character } from "./Character";
-import { useSearchParams } from "react-router";
 import { GridLoader } from "react-spinners";
 import { Title } from "./helperComponent/Title";
 import { Query } from "../models/enums/query";
 import type z from "zod";
 import type { CharacterBaseZ } from "../schema/characterBaseZ";
+import { usePathname, useRouter } from "@/i18n/navigation";
+import { useSearchParams } from "next/navigation";
 
 export const ListOfCharacters = memo(function ListOfCharacters({
   characters,
@@ -14,17 +15,19 @@ export const ListOfCharacters = memo(function ListOfCharacters({
   characters: z.infer<typeof CharacterBaseZ>[] | undefined;
   isLoading: boolean;
 }) {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const handleClick = useCallback(
     (id: string) => {
-      const params = new URLSearchParams(searchParams);
+      const params = new URLSearchParams(searchParams.toString());
 
       params.set(Query.DETAILS, id);
 
-      setSearchParams(params);
+      router.replace(`${pathname}?${params}`);
     },
-    [searchParams, setSearchParams],
+    [searchParams],
   );
 
   return (

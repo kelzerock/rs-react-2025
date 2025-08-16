@@ -1,16 +1,19 @@
 import { useEffect, useState, type FC, type JSX } from "react";
-import { useSearchParams } from "react-router";
 import { GridLoader } from "react-spinners";
 import { Title } from "./helperComponent/Title";
 import { CloseIcon } from "./helperComponent/CloseIcon";
 import { Query } from "../models/enums/query";
 import { useGetSingleCharacterQuery } from "../serviceAPI/stapiAPI";
+import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 
 export const CharacterInfo: FC<{ forceFetching: boolean }> = ({
   forceFetching,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const details = searchParams.get(Query.DETAILS);
 
@@ -20,8 +23,9 @@ export const CharacterInfo: FC<{ forceFetching: boolean }> = ({
   );
   const handleClose = () => {
     if (searchParams.has(Query.DETAILS)) {
-      searchParams.delete(Query.DETAILS);
-      setSearchParams(searchParams);
+      const newSearchParams = new URLSearchParams(searchParams.toString());
+      newSearchParams.delete(Query.DETAILS);
+      router.replace(`${pathname}?${newSearchParams.toString()}`);
     }
     setIsOpen(false);
   };

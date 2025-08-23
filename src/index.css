@@ -6,3 +6,11 @@ html,
 body {
   height: 100%;
 }
+
+body {
+  position: relative;
+}
+
+.btn-form-open {
+  @apply bg-stone-700 text-stone-100 p-3 rounded-md font-semibold hover:bg-stone-800 hover:cursor-pointer transition-colors duration-300 dark:hover:bg-stone-500;
+}

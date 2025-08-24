@@ -1,0 +1,28 @@
+@import "tailwindcss";
+@plugin 'tailwind-scrollbar';
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  position: relative;
+}
+
+.btn-form-open {
+  @apply bg-stone-700 text-stone-100 p-3 rounded-md font-semibold hover:bg-stone-800 hover:cursor-pointer transition-colors duration-300 dark:hover:bg-stone-500 disabled:bg-zinc-300 disabled:text-zinc-400;
+}
+
+.label {
+  @apply grid grid-cols-1 sm:grid-cols-3 gap-1.5 capitalize w-full bg-stone-200 p-1;
+}
+
+.input-text {
+  @apply border-2 border-stone-400 rounded-md p-1 grow overflow-hidden text-xs sm:text-sm col-span-1 sm:col-span-2 w-full;
+}
+
+.error-msg {
+  @apply bg-red-200 text-xs py-1 px-3 rounded-sm self-start;
+}

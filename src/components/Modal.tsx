@@ -35,7 +35,7 @@ export const Modal = ({
         className="fixed top-0 left-0 w-full h-full bg-stone-900/50 backdrop-blur-md"
         onClick={(event) => handleClose(event)}
       >
-        <div className="bg-stone-100 rounded-md p-3 fixed top-3 left-1/2 -translate-x-1/2 w-11/12 sm:w-9/12 md:w-auto">
+        <div className="bg-stone-100 rounded-md p-3 fixed top-3 left-1/2 -translate-x-1/2 w-11/12 sm:w-9/12 md:w-7/12 lg:w-7/12 xl:w-1/2">
           <h3>Modal window</h3>
           {formTemplate}
         </div>

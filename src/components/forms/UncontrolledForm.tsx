@@ -138,7 +138,7 @@ export const UncontrolledForm = ({ close }: { close: () => void }) => {
             data-testid="password-input"
           />
         </label>
-        <PasswordStrength password={watch("password") || ""} />
+        {watch("password") && <PasswordStrength password={watch("password")} />}
         {errors.password && (
           <p role="alert" className="error-msg">
             {errors.password.message}
@@ -208,11 +208,10 @@ export const UncontrolledForm = ({ close }: { close: () => void }) => {
         )}
         <label className="label">
           country
-          <div className="relative">
+          <div className="relative col-span-1 sm:col-span-2 w-full">
             <input
               {...register("country", {
                 onChange: (e) => {
-                  // Автоматически приводим к правильному регистру при выборе из списка
                   const selectedCountry = countriesList.find(
                     (country) =>
                       country.toLowerCase() === e.target.value.toLowerCase(),

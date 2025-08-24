@@ -16,11 +16,11 @@ body {
 }
 
 .label {
-  @apply flex gap-1.5 sm:items-center capitalize w-full flex-col sm:flex-row items-stretch justify-start;
+  @apply grid grid-cols-1 sm:grid-cols-3 gap-1.5 capitalize w-full bg-stone-200 p-1;
 }
 
 .input-text {
-  @apply border-2 border-stone-400 rounded-md p-1 grow overflow-hidden text-xs sm:text-sm;
+  @apply border-2 border-stone-400 rounded-md p-1 grow overflow-hidden text-xs sm:text-sm col-span-1 sm:col-span-2 w-full;
 }
 
 .error-msg {

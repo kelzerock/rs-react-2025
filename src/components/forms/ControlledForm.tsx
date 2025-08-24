@@ -162,7 +162,7 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
             defaultValue=""
           />
         </label>
-        <PasswordStrength password={watch("password") || ""} />
+        {watch("password") && <PasswordStrength password={watch("password")} />}
         {errors.password && (
           <p role="alert" className="error-msg">
             {errors.password.message}
@@ -270,10 +270,10 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
             name="country"
             control={control}
             render={({ field }) => (
-              <div className="relative">
+              <div className="relative col-span-1 sm:col-span-2 w-full">
                 <input
                   list="control-list"
-                  className="input-text w-full"
+                  className="input-text"
                   placeholder="Start typing to search countries..."
                   {...field}
                   onChange={(e) => {

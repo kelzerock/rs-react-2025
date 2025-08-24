@@ -1,4 +1,4 @@
-import type { JSX } from "react";
+import { useEffect, useRef, type JSX } from "react";
 import { createPortal } from "react-dom";
 
 export const Modal = ({
@@ -10,13 +10,30 @@ export const Modal = ({
   isOpen: boolean;
   close: () => void;
 }) => {
+  const refForm = useRef(null);
+  useEffect(() => {
+    const handleKeyDownEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
+    window.addEventListener("keydown", handleKeyDownEsc);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDownEsc);
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
+
+  const handleClose = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (e.target !== refForm.current) return;
+    close();
+  };
 
   const modal = (
     <>
       <div
+        ref={refForm}
         className="fixed top-0 left-0 w-full h-full bg-stone-900/50 backdrop-blur-md"
-        onClick={close}
+        onClick={(event) => handleClose(event)}
       >
         <div className="bg-stone-100 rounded-md p-3 fixed top-3 left-1/2 -translate-x-1/2 w-11/12 sm:w-9/12 md:w-auto">
           <h3>Modal window</h3>

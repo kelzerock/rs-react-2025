@@ -14,3 +14,15 @@ body {
 .btn-form-open {
   @apply bg-stone-700 text-stone-100 p-3 rounded-md font-semibold hover:bg-stone-800 hover:cursor-pointer transition-colors duration-300 dark:hover:bg-stone-500;
 }
+
+.label {
+  @apply flex gap-1.5 sm:items-center capitalize w-full flex-col sm:flex-row items-stretch justify-start;
+}
+
+.input-text {
+  @apply border-2 border-stone-400 rounded-md p-1 grow overflow-hidden text-xs sm:text-sm;
+}
+
+.error-msg {
+  @apply bg-red-200 text-xs py-1 px-3 rounded-sm self-start;
+}

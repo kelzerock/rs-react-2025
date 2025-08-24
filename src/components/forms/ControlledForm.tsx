@@ -83,7 +83,13 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
         <label className="label">
           name
           <Controller
-            render={({ field }) => <input {...field} className="input-text" />}
+            render={({ field }) => (
+              <input
+                {...field}
+                className="input-text"
+                data-testid="name-input"
+              />
+            )}
             name="name"
             control={control}
             defaultValue=""
@@ -103,6 +109,7 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
                 onChange={(event) => field.onChange(+event.target.value)}
                 type="number"
                 className="input-text"
+                data-testid="age-input"
               />
             )}
             name="age"
@@ -118,7 +125,13 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
         <label className="label">
           email
           <Controller
-            render={({ field }) => <input {...field} className="input-text" />}
+            render={({ field }) => (
+              <input
+                {...field}
+                className="input-text"
+                data-testid="email-input"
+              />
+            )}
             name="email"
             control={control}
             defaultValue=""
@@ -141,6 +154,7 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
                   field.onChange(e);
                   trigger(["password", "confirmPassword"]);
                 }}
+                data-testid="password-input"
               />
             )}
             name="password"
@@ -166,6 +180,7 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
                   field.onChange(e);
                   trigger(["password", "confirmPassword"]);
                 }}
+                data-testid="confirm-password-input"
               />
             )}
             name="confirmPassword"
@@ -184,7 +199,11 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
             name="gender"
             control={control}
             render={({ field }) => (
-              <select {...field} className="input-text">
+              <select
+                {...field}
+                className="input-text"
+                data-testid="gender-input"
+              >
                 <option value="female">female</option>
                 <option value="male">male</option>
               </select>
@@ -210,6 +229,7 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
                 onBlur={field.onBlur}
                 name={field.name}
                 ref={field.ref}
+                data-testid="accept-terms-input"
               />
             )}
             control={control}
@@ -232,6 +252,7 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
                 onChange={(e) => field.onChange(e.target.files)}
                 onBlur={field.onBlur}
                 ref={field.ref}
+                data-testid="picture-input"
               />
             )}
             name="picture"
@@ -257,7 +278,6 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
                   {...field}
                   onChange={(e) => {
                     field.onChange(e);
-                    // Автоматически приводим к правильному регистру при выборе из списка
                     const selectedCountry = countriesList.find(
                       (country) =>
                         country.toLowerCase() === e.target.value.toLowerCase(),
@@ -266,6 +286,7 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
                       field.onChange(selectedCountry);
                     }
                   }}
+                  data-testid="country-input"
                 />
                 <datalist id="control-list">
                   {countriesList.map((country) => (

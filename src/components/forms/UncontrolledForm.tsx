@@ -90,6 +90,7 @@ export const UncontrolledForm = ({ close }: { close: () => void }) => {
             type="text"
             {...register("name", { required: "Name is required" })}
             aria-required="true"
+            data-testid="name-input"
           />
         </label>
         {errors.name && (
@@ -104,6 +105,7 @@ export const UncontrolledForm = ({ close }: { close: () => void }) => {
             type="number"
             {...register("age", { valueAsNumber: true })}
             aria-required="true"
+            data-testid="age-input"
           />
         </label>
         {errors.age && (
@@ -118,6 +120,7 @@ export const UncontrolledForm = ({ close }: { close: () => void }) => {
             type="text"
             {...register("email")}
             aria-required="true"
+            data-testid="email-input"
           />
         </label>
         {errors.email && (
@@ -132,6 +135,7 @@ export const UncontrolledForm = ({ close }: { close: () => void }) => {
             type="password"
             {...register("password")}
             aria-required="true"
+            data-testid="password-input"
           />
         </label>
         <PasswordStrength password={watch("password") || ""} />
@@ -147,6 +151,7 @@ export const UncontrolledForm = ({ close }: { close: () => void }) => {
             type="password"
             {...register("confirmPassword")}
             aria-required="true"
+            data-testid="confirm-password-input"
           />
         </label>
         {errors.confirmPassword && (
@@ -160,6 +165,7 @@ export const UncontrolledForm = ({ close }: { close: () => void }) => {
             {...register("gender")}
             className="input-text"
             aria-required="true"
+            data-testid="gender-input"
           >
             <option value="female">female</option>
             <option value="male">male</option>
@@ -177,6 +183,7 @@ export const UncontrolledForm = ({ close }: { close: () => void }) => {
             type="checkbox"
             {...register("acceptTerms")}
             aria-required="true"
+            data-testid="accept-terms-input"
           />
         </label>
         {errors.acceptTerms && (
@@ -191,6 +198,7 @@ export const UncontrolledForm = ({ close }: { close: () => void }) => {
             type="file"
             {...register("picture")}
             aria-required="true"
+            data-testid="picture-input"
           />
         </label>
         {typeof errors.picture?.message === "string" && (
@@ -218,6 +226,7 @@ export const UncontrolledForm = ({ close }: { close: () => void }) => {
               aria-required="true"
               list="uncontrolled-list"
               placeholder="Start typing to search countries..."
+              data-testid="country-input"
             />
             <datalist id="uncontrolled-list">
               {countriesList.map((country) => (

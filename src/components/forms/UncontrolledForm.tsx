@@ -10,6 +10,7 @@ import {
   addCurrentStateUncontrolledForm,
   addToDbUncontrolledForm,
 } from "../../store/formUncontrolledSlice";
+import { PasswordStrength } from "../PasswordStrength";
 
 export const UncontrolledForm = ({ close }: { close: () => void }) => {
   const {
@@ -17,6 +18,7 @@ export const UncontrolledForm = ({ close }: { close: () => void }) => {
     handleSubmit,
     formState: { errors, isValid },
     reset,
+    watch,
   } = useForm({
     resolver: zodResolver(SchemaForm),
   });
@@ -132,6 +134,7 @@ export const UncontrolledForm = ({ close }: { close: () => void }) => {
             aria-required="true"
           />
         </label>
+        <PasswordStrength password={watch("password") || ""} />
         {errors.password && (
           <p role="alert" className="error-msg">
             {errors.password.message}

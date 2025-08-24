@@ -7,6 +7,7 @@ import { selectCountries } from "../../store/countrySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { addCurrentState, addToDb } from "../../store/formControlSlice";
 import { fileToBase64 } from "../../utils/fileToBase64";
+import { PasswordStrength } from "../PasswordStrength";
 
 export const ControlledForm = ({ close }: { close: () => void }) => {
   const {
@@ -15,6 +16,7 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
     control,
     reset,
     trigger,
+    watch,
   } = useForm({
     resolver: zodResolver(SchemaForm),
     mode: "onChange",
@@ -146,6 +148,7 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
             defaultValue=""
           />
         </label>
+        <PasswordStrength password={watch("password") || ""} />
         {errors.password && (
           <p role="alert" className="error-msg">
             {errors.password.message}

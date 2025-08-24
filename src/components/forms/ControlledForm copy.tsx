@@ -1,63 +1,18 @@
 import { useEffect, useRef } from "react";
 import { countryList } from "../../constant/countries";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import z from "zod";
+import { useForm, type SubmitHandler, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-const schemaForm = z
-  .object({
-    name: z
-      .string()
-      .trim()
-      .min(1, { message: "Name must have 1 and more characters" })
-      .refine((val) => /^[A-ZА-Я]/.test(val), {
-        message: "First character must be uppercase",
-      }),
-    age: z
-      .number("Please, inter number")
-      .positive("Age must be positive integer")
-      .max(120, "I think you are lier!!!")
-      .min(1, "Age must be more than 0"),
-    email: z.email("Please, enter correct mail!"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
-    confirmPassword: z.string(),
-    gender: z.literal(["male", "female"], "Please choose one option"),
-    acceptTerms: z
-      .boolean()
-      .refine((val) => val === true, "You need to agree with it!"),
-    picture: z
-      .any()
-      .refine((val) => val instanceof FileList && val.length > 0, {
-        message: "Load image file (png/jpeg)",
-      })
-      .transform((val) => val[0])
-      .refine((file) => file.size <= 1_000_000, {
-        message: "Maximum size 1Mb",
-      })
-      .refine((file) => ["image/png", "image/jpeg"].includes(file.type), {
-        message: "Allow only 'png' and 'jpeg'",
-      }),
-    country: z.string("Please choose one option."),
-  })
-  .superRefine((data, ctx) => {
-    if (data.password !== data.confirmPassword) {
-      ctx.addIssue({
-        message: "Passwords do not match",
-        path: ["confirmPassword"],
-        code: "custom",
-      });
-    }
-  });
-
-type SchemaForm = z.infer<typeof schemaForm>;
+import type { SchemaFormType } from "../../models/types/schemaForm";
+import { SchemaForm } from "../../schema/schemaForm";
 
 export const ControlledForm = () => {
   const {
-    register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
+    control,
   } = useForm({
-    resolver: zodResolver(schemaForm),
+    resolver: zodResolver(SchemaForm),
+    mode: "onChange",
   });
   const formWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -100,10 +55,11 @@ export const ControlledForm = () => {
       formWrapperRef.current?.removeEventListener("keydown", trapFocus);
   }, []);
 
-  const onSubmit: SubmitHandler<SchemaForm> = (data) => {
-    console.log({ data });
+  const onSubmit: SubmitHandler<SchemaFormType> = (data) => {
+    console.log(data);
   };
 
+  console.log({ errors, isValid });
   return (
     <div ref={formWrapperRef} className="flex flex-col gap-2">
       <h4>ControlledForm</h4>
@@ -113,11 +69,11 @@ export const ControlledForm = () => {
       >
         <label className="label">
           name
-          <input
-            className="input-text"
-            type="text"
-            {...register("name", { required: "Name is required" })}
-            aria-required="true"
+          <Controller
+            render={({ field }) => <input {...field} className="input-text" />}
+            name="name"
+            control={control}
+            defaultValue=""
           />
         </label>
         {errors.name && (
@@ -127,11 +83,17 @@ export const ControlledForm = () => {
         )}
         <label className="label">
           age
-          <input
-            className="input-text"
-            type="number"
-            {...register("age", { valueAsNumber: true })}
-            aria-required="true"
+          <Controller
+            render={({ field }) => (
+              <input
+                {...field}
+                onChange={(event) => field.onChange(+event.target.value)}
+                type="number"
+                className="input-text"
+              />
+            )}
+            name="age"
+            control={control}
           />
         </label>
         {errors.age && (
@@ -141,11 +103,11 @@ export const ControlledForm = () => {
         )}
         <label className="label">
           email
-          <input
-            className="input-text"
-            type="text"
-            {...register("email")}
-            aria-required="true"
+          <Controller
+            render={({ field }) => <input {...field} className="input-text" />}
+            name="email"
+            control={control}
+            defaultValue=""
           />
         </label>
         {errors.email && (
@@ -155,11 +117,13 @@ export const ControlledForm = () => {
         )}
         <label className="label">
           password
-          <input
-            className="input-text"
-            type="password"
-            {...register("password")}
-            aria-required="true"
+          <Controller
+            render={({ field }) => (
+              <input {...field} type="password" className="input-text" />
+            )}
+            name="password"
+            control={control}
+            defaultValue=""
           />
         </label>
         {errors.password && (
@@ -169,11 +133,13 @@ export const ControlledForm = () => {
         )}
         <label className="label">
           confirm password
-          <input
-            className="input-text"
-            type="password"
-            {...register("confirmPassword")}
-            aria-required="true"
+          <Controller
+            render={({ field }) => (
+              <input {...field} type="password" className="input-text" />
+            )}
+            name="confirmPassword"
+            control={control}
+            defaultValue=""
           />
         </label>
         {errors.confirmPassword && (
@@ -183,14 +149,17 @@ export const ControlledForm = () => {
         )}
         <label className="label">
           gender
-          <select
-            {...register("gender")}
-            className="input-text"
-            aria-required="true"
-          >
-            <option value="female">female</option>
-            <option value="male">male</option>
-          </select>
+          <Controller
+            name="gender"
+            control={control}
+            render={({ field }) => (
+              <select {...field} className="input-text">
+                <option value="female">female</option>
+                <option value="male">male</option>
+              </select>
+            )}
+            defaultValue="female"
+          />
         </label>
         {errors.gender && (
           <p role="alert" className="error-msg">
@@ -199,11 +168,21 @@ export const ControlledForm = () => {
         )}
         <label className="label">
           Accept term
-          <input
-            className="input-text"
-            type="checkbox"
-            {...register("acceptTerms")}
-            aria-required="true"
+          <Controller
+            name="acceptTerms"
+            render={({ field }) => (
+              <input
+                type="checkbox"
+                className="input-text"
+                checked={field.value}
+                onChange={(e) => field.onChange(e.target.checked)}
+                onBlur={field.onBlur}
+                name={field.name}
+                ref={field.ref}
+              />
+            )}
+            control={control}
+            defaultValue={false}
           />
         </label>
         {errors.acceptTerms && (
@@ -213,11 +192,19 @@ export const ControlledForm = () => {
         )}
         <label className="label">
           Load image
-          <input
-            className="input-text w-full"
-            type="file"
-            {...register("picture")}
-            aria-required="true"
+          <Controller
+            render={({ field }) => (
+              <input
+                type="file"
+                className="input-text"
+                accept="image/png, image/jpeg"
+                onChange={(e) => field.onChange(e.target.files)}
+                onBlur={field.onBlur}
+                ref={field.ref}
+              />
+            )}
+            name="picture"
+            control={control}
           />
         </label>
         {typeof errors.picture?.message === "string" && (
@@ -227,24 +214,29 @@ export const ControlledForm = () => {
         )}
         <label className="label">
           country
-          <select
-            {...register("country")}
-            className="input-text w-full"
-            aria-required="true"
-          >
-            {countryList.map((country) => (
-              <option value={country} key={country}>
-                {country}
-              </option>
-            ))}
-          </select>
+          <Controller
+            name="country"
+            control={control}
+            render={({ field }) => (
+              <select className="input-text w-full" {...field}>
+                {countryList.map((country) => (
+                  <option value={country} key={country}>
+                    {country}
+                  </option>
+                ))}
+              </select>
+            )}
+            defaultValue={countryList[0]}
+          />
         </label>
         {errors.country && (
           <p role="alert" className="error-msg">
             {errors.country.message}
           </p>
         )}
-        <button className="btn-form-open">Submit form</button>
+        <button className="btn-form-open" disabled={!isValid}>
+          Submit form
+        </button>
       </form>
     </div>
   );

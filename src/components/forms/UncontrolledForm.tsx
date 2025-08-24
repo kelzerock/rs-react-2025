@@ -1,55 +1,9 @@
 import { useEffect, useRef } from "react";
 import { countryList } from "../../constant/countries";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-const schemaForm = z
-  .object({
-    name: z
-      .string()
-      .trim()
-      .min(1, { message: "Name must have 1 and more characters" })
-      .refine((val) => /^[A-ZА-Я]/.test(val), {
-        message: "First character must be uppercase",
-      }),
-    age: z
-      .number("Please, inter number")
-      .positive("Age must be positive integer")
-      .max(120, "I think you are lier!!!")
-      .min(1, "Age must be more than 0"),
-    email: z.email("Please, enter correct mail!"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
-    confirmPassword: z.string(),
-    gender: z.literal(["male", "female"], "Please choose one option"),
-    acceptTerms: z
-      .boolean()
-      .refine((val) => val === true, "You need to agree with it!"),
-    picture: z
-      .any()
-      .refine((val) => val instanceof FileList && val.length > 0, {
-        message: "Load image file (png/jpeg)",
-      })
-      .transform((val) => val[0])
-      .refine((file) => file.size <= 1_000_000, {
-        message: "Maximum size 1Mb",
-      })
-      .refine((file) => ["image/png", "image/jpeg"].includes(file.type), {
-        message: "Allow only 'png' and 'jpeg'",
-      }),
-    country: z.string("Please choose one option."),
-  })
-  .superRefine((data, ctx) => {
-    if (data.password !== data.confirmPassword) {
-      ctx.addIssue({
-        message: "Passwords do not match",
-        path: ["confirmPassword"],
-        code: "custom",
-      });
-    }
-  });
-
-type SchemaForm = z.infer<typeof schemaForm>;
+import type { SchemaFormType } from "../../models/types/schemaForm";
+import { SchemaForm } from "../../schema/schemaForm";
 
 export const UncontrolledForm = () => {
   const {
@@ -57,7 +11,7 @@ export const UncontrolledForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(schemaForm),
+    resolver: zodResolver(SchemaForm),
   });
   const formWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -100,7 +54,7 @@ export const UncontrolledForm = () => {
       formWrapperRef.current?.removeEventListener("keydown", trapFocus);
   }, []);
 
-  const onSubmit: SubmitHandler<SchemaForm> = (data) => {
+  const onSubmit: SubmitHandler<SchemaFormType> = (data) => {
     console.log({ data });
   };
 

@@ -20,14 +20,17 @@ const initialState: {
   current: { ...initialCurrentForm },
 };
 
-export const formControlSlice = createSlice({
-  name: "formControl",
+export const formUncontrolledSlice = createSlice({
+  name: "formUncontrolled",
   initialState,
   reducers: {
-    addCurrentState: (state, action: PayloadAction<SchemaFormTypeForDb>) => {
+    addCurrentStateUncontrolledForm: (
+      state,
+      action: PayloadAction<SchemaFormTypeForDb>,
+    ) => {
       return { ...state, current: { ...action.payload } };
     },
-    addToDb: (state) => {
+    addToDbUncontrolledForm: (state) => {
       return {
         db: [...state.db, state.current],
         current: { ...initialCurrentForm },
@@ -36,7 +39,9 @@ export const formControlSlice = createSlice({
   },
 });
 
-export const selectFormControlDB = (state: RootState) => state.formControl.db;
-export const { addCurrentState, addToDb } = formControlSlice.actions;
+export const selectFormUncontrolledDB = (state: RootState) =>
+  state.formUncontrolled.db;
+export const { addCurrentStateUncontrolledForm, addToDbUncontrolledForm } =
+  formUncontrolledSlice.actions;
 
-export default formControlSlice.reducer;
+export default formUncontrolledSlice.reducer;

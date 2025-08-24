@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addCurrentState, addToDb } from "../../store/formControlSlice";
 import { fileToBase64 } from "../../utils/fileToBase64";
 
-export const ControlledForm = () => {
+export const ControlledForm = ({ close }: { close: () => void }) => {
   const {
     handleSubmit,
     formState: { errors, isValid },
@@ -67,9 +67,9 @@ export const ControlledForm = () => {
     dispatch(addCurrentState(newData));
     dispatch(addToDb());
     reset();
+    close();
   };
 
-  console.log({ errors, isValid });
   return (
     <div ref={formWrapperRef} className="flex flex-col gap-2">
       <h4>ControlledForm</h4>

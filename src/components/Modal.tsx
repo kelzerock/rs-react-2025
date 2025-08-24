@@ -1,12 +1,12 @@
-import { useEffect, useRef, type JSX } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 
 export const Modal = ({
-  formTemplate: FormTemplate,
+  formTemplate,
   isOpen,
   close,
 }: {
-  formTemplate: () => JSX.Element;
+  formTemplate: ReactNode;
   isOpen: boolean;
   close: () => void;
 }) => {
@@ -19,7 +19,7 @@ export const Modal = ({
     return () => {
       window.removeEventListener("keydown", handleKeyDownEsc);
     };
-  }, [isOpen]);
+  }, [isOpen, close]);
 
   if (!isOpen) return null;
 
@@ -37,7 +37,7 @@ export const Modal = ({
       >
         <div className="bg-stone-100 rounded-md p-3 fixed top-3 left-1/2 -translate-x-1/2 w-11/12 sm:w-9/12 md:w-auto">
           <h3>Modal window</h3>
-          <FormTemplate />
+          {formTemplate}
         </div>
       </div>
     </>

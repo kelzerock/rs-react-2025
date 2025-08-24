@@ -3,19 +3,26 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { SchemaFormType } from "../../models/types/schemaForm";
 import { SchemaForm } from "../../schema/schemaForm";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCountries } from "../../store/countrySlice";
+import { fileToBase64 } from "../../utils/fileToBase64";
+import {
+  addCurrentStateUncontrolledForm,
+  addToDbUncontrolledForm,
+} from "../../store/formUncontrolledSlice";
 
-export const UncontrolledForm = () => {
+export const UncontrolledForm = ({ close }: { close: () => void }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
+    reset,
   } = useForm({
     resolver: zodResolver(SchemaForm),
   });
   const formWrapperRef = useRef<HTMLDivElement>(null);
   const countriesList = useSelector(selectCountries);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (formWrapperRef.current === null) return;
@@ -56,8 +63,15 @@ export const UncontrolledForm = () => {
       formWrapperRef.current?.removeEventListener("keydown", trapFocus);
   }, []);
 
-  const onSubmit: SubmitHandler<SchemaFormType> = (data) => {
-    console.log({ data });
+  const onSubmit: SubmitHandler<SchemaFormType> = async (data) => {
+    if (isValid) {
+      const base64Image = await fileToBase64(data.picture);
+      const newData = { ...data, picture: base64Image };
+      dispatch(addCurrentStateUncontrolledForm(newData));
+      dispatch(addToDbUncontrolledForm());
+      reset();
+      close();
+    }
   };
 
   return (

@@ -35,13 +35,14 @@ export const SchemaForm = z
       }),
     country: z
       .string()
-      .refine(
-        (val) =>
-          countryList.some(
-            (country) => country.toLowerCase() === val.trim().toLowerCase(),
-          ),
-        "Please choose one option",
-      ),
+      .min(1, "Please choose a country")
+      .refine((val) => {
+        const trimmedVal = val.trim();
+        if (!trimmedVal) return false;
+        return countryList.some(
+          (country) => country.toLowerCase() === trimmedVal.toLowerCase(),
+        );
+      }, "Please choose a valid country from the list"),
   })
   .refine(
     (data) => {

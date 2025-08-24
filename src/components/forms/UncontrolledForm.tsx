@@ -200,19 +200,33 @@ export const UncontrolledForm = ({ close }: { close: () => void }) => {
         )}
         <label className="label">
           country
-          <input
-            {...register("country")}
-            className="input-text w-full"
-            aria-required="true"
-            list="uncontrolled-list"
-          />
-          <datalist id="uncontrolled-list">
-            {countriesList.map((country) => (
-              <option value={country} key={country}>
-                {country}
-              </option>
-            ))}
-          </datalist>
+          <div className="relative">
+            <input
+              {...register("country", {
+                onChange: (e) => {
+                  // Автоматически приводим к правильному регистру при выборе из списка
+                  const selectedCountry = countriesList.find(
+                    (country) =>
+                      country.toLowerCase() === e.target.value.toLowerCase(),
+                  );
+                  if (selectedCountry) {
+                    e.target.value = selectedCountry;
+                  }
+                },
+              })}
+              className="input-text w-full"
+              aria-required="true"
+              list="uncontrolled-list"
+              placeholder="Start typing to search countries..."
+            />
+            <datalist id="uncontrolled-list">
+              {countriesList.map((country) => (
+                <option value={country} key={country}>
+                  {country}
+                </option>
+              ))}
+            </datalist>
+          </div>
         </label>
         {errors.country && (
           <p role="alert" className="error-msg">

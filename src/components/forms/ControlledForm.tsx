@@ -249,21 +249,35 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
             name="country"
             control={control}
             render={({ field }) => (
-              <input
-                list="control-list"
-                className="input-text w-full"
-                {...field}
-              />
+              <div className="relative">
+                <input
+                  list="control-list"
+                  className="input-text w-full"
+                  placeholder="Start typing to search countries..."
+                  {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    // Автоматически приводим к правильному регистру при выборе из списка
+                    const selectedCountry = countriesList.find(
+                      (country) =>
+                        country.toLowerCase() === e.target.value.toLowerCase(),
+                    );
+                    if (selectedCountry) {
+                      field.onChange(selectedCountry);
+                    }
+                  }}
+                />
+                <datalist id="control-list">
+                  {countriesList.map((country) => (
+                    <option value={country} key={country}>
+                      {country}
+                    </option>
+                  ))}
+                </datalist>
+              </div>
             )}
             defaultValue=""
           />
-          <datalist id="control-list">
-            {countriesList.map((country) => (
-              <option value={country} key={country}>
-                {country}
-              </option>
-            ))}
-          </datalist>
         </label>
         {errors.country && (
           <p role="alert" className="error-msg">

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { SchemaFormTypeForDb } from "../models/types/schemaFormForDb";
+import { PasswordStrength } from "./PasswordStrength";
 
 export const Card = ({ card }: { card: SchemaFormTypeForDb }) => {
   const [isNew, setIsNew] = useState(false);
@@ -29,9 +30,13 @@ export const Card = ({ card }: { card: SchemaFormTypeForDb }) => {
           ? "bg-yellow-100 border-yellow-400 shadow-lg"
           : "bg-stone-100 border-stone-900"
       }`}
+      data-testid="card"
     >
       {isNew && (
-        <div className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full animate-pulse">
+        <div
+          className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full animate-pulse"
+          data-testid="card-new"
+        >
           NEW!
         </div>
       )}
@@ -39,14 +44,18 @@ export const Card = ({ card }: { card: SchemaFormTypeForDb }) => {
         src={card.picture}
         alt="avatar"
         className="w-[50px] aspect-square object-cover rounded-2xl"
+        data-testid="card-image"
       />
-      <span className="">Name: {card.name}</span>
-      <span>Age: {card.age}</span>
-      <span>Password: {card.password}</span>
-      <span>Email: {card.email}</span>
-      <span>Gender: {card.gender}</span>
-      <span>Country: {card.country}</span>
-      <span>T&C: {card.acceptTerms ? "agree" : "disagree"}</span>
+      <span data-testid="card-name">Name: {card.name}</span>
+      <span data-testid="card-age">Age: {card.age}</span>
+      <span data-testid="card-password">Password: {card.password}</span>
+      <PasswordStrength password={card.password} />
+      <span data-testid="card-email">Email: {card.email}</span>
+      <span data-testid="card-gender">Gender: {card.gender}</span>
+      <span data-testid="card-country">Country: {card.country}</span>
+      <span data-testid="card-tnc">
+        T&C: {card.acceptTerms ? "agree" : "disagree"}
+      </span>
     </div>
   );
 };

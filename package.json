@@ -13,7 +13,7 @@
     "preview": "vite preview",
     "prepare": "husky",
     "test": "vitest",
-    "test:pre-push": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",

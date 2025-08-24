@@ -76,7 +76,7 @@ export const UncontrolledForm = ({ close }: { close: () => void }) => {
 
   return (
     <div ref={formWrapperRef} className="flex flex-col gap-2">
-      <h4>ControlledForm</h4>
+      <h4>UncontrolledForm</h4>
       <form
         className="border-2 border-stone-700 p-2 rounded-md flex flex-col gap-1"
         onSubmit={handleSubmit(onSubmit)}
@@ -197,17 +197,19 @@ export const UncontrolledForm = ({ close }: { close: () => void }) => {
         )}
         <label className="label">
           country
-          <select
+          <input
             {...register("country")}
             className="input-text w-full"
             aria-required="true"
-          >
+            list="uncontrolled-list"
+          />
+          <datalist id="uncontrolled-list">
             {countriesList.map((country) => (
               <option value={country} key={country}>
                 {country}
               </option>
             ))}
-          </select>
+          </datalist>
         </label>
         {errors.country && (
           <p role="alert" className="error-msg">

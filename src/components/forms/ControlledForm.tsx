@@ -14,6 +14,7 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
     formState: { errors, isValid },
     control,
     reset,
+    trigger,
   } = useForm({
     resolver: zodResolver(SchemaForm),
     mode: "onChange",
@@ -104,6 +105,7 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
             )}
             name="age"
             control={control}
+            defaultValue={0}
           />
         </label>
         {errors.age && (
@@ -129,7 +131,15 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
           password
           <Controller
             render={({ field }) => (
-              <input {...field} type="password" className="input-text" />
+              <input
+                {...field}
+                type="password"
+                className="input-text"
+                onChange={(e) => {
+                  field.onChange(e);
+                  trigger(["password", "confirmPassword"]);
+                }}
+              />
             )}
             name="password"
             control={control}
@@ -145,7 +155,15 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
           confirm password
           <Controller
             render={({ field }) => (
-              <input {...field} type="password" className="input-text" />
+              <input
+                {...field}
+                type="password"
+                className="input-text"
+                onChange={(e) => {
+                  field.onChange(e);
+                  trigger(["password", "confirmPassword"]);
+                }}
+              />
             )}
             name="confirmPassword"
             control={control}
@@ -228,16 +246,21 @@ export const ControlledForm = ({ close }: { close: () => void }) => {
             name="country"
             control={control}
             render={({ field }) => (
-              <select className="input-text w-full" {...field}>
-                {countriesList.map((country) => (
-                  <option value={country} key={country}>
-                    {country}
-                  </option>
-                ))}
-              </select>
+              <input
+                list="control-list"
+                className="input-text w-full"
+                {...field}
+              />
             )}
-            defaultValue={countriesList[0]}
+            defaultValue=""
           />
+          <datalist id="control-list">
+            {countriesList.map((country) => (
+              <option value={country} key={country}>
+                {country}
+              </option>
+            ))}
+          </datalist>
         </label>
         {errors.country && (
           <p role="alert" className="error-msg">

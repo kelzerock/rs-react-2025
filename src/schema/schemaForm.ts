@@ -1,4 +1,5 @@
 import z from "zod";
+import { countryList } from "../constant/countries";
 
 export const SchemaForm = z
   .object({
@@ -10,14 +11,14 @@ export const SchemaForm = z
         message: "First character must be uppercase",
       }),
     age: z
-      .number("Please, inter number")
+      .number()
       .positive("Age must be positive integer")
       .max(120, "I think you are lier!!!")
       .min(1, "Age must be more than 0"),
-    email: z.email("Please, enter correct mail!"),
+    email: z.string().email("Please, enter correct mail!"),
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string(),
-    gender: z.literal(["male", "female"], "Please choose one option"),
+    gender: z.enum(["male", "female"], "Please choose one option"),
     acceptTerms: z
       .boolean()
       .refine((val) => val === true, "You need to agree with it!"),
@@ -32,14 +33,35 @@ export const SchemaForm = z
       .refine((file) => ["image/png", "image/jpeg"].includes(file.type), {
         message: "Allow only 'png' and 'jpeg'",
       }),
-    country: z.string("Please choose one option."),
+    country: z
+      .string()
+      .refine(
+        (val) =>
+          countryList.some(
+            (country) => country.toLowerCase() === val.trim().toLowerCase(),
+          ),
+        "Please choose one option",
+      ),
   })
-  .superRefine((data, ctx) => {
-    if (data.password !== data.confirmPassword) {
-      ctx.addIssue({
-        message: "Passwords do not match",
-        path: ["confirmPassword"],
-        code: "custom",
-      });
-    }
-  });
+  .refine(
+    (data) => {
+      if (!data.password) return true;
+      return data.password === data.confirmPassword;
+    },
+    {
+      message: "Passwords do not match",
+      path: ["confirmPassword"],
+    },
+  )
+  .refine(
+    (data) => {
+      if (data.confirmPassword && !data.password) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Please enter password first",
+      path: ["password"],
+    },
+  );

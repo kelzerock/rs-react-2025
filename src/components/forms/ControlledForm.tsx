@@ -1,20 +1,26 @@
 import { useEffect, useRef } from "react";
-import { countryList } from "../../constant/countries";
 import { useForm, type SubmitHandler, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { SchemaFormType } from "../../models/types/schemaForm";
 import { SchemaForm } from "../../schema/schemaForm";
+import { selectCountries } from "../../store/countrySlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addCurrentState, addToDb } from "../../store/formControlSlice";
+import { fileToBase64 } from "../../utils/fileToBase64";
 
 export const ControlledForm = () => {
   const {
     handleSubmit,
     formState: { errors, isValid },
     control,
+    reset,
   } = useForm({
     resolver: zodResolver(SchemaForm),
     mode: "onChange",
   });
   const formWrapperRef = useRef<HTMLDivElement>(null);
+  const countriesList = useSelector(selectCountries);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (formWrapperRef.current === null) return;
@@ -55,8 +61,12 @@ export const ControlledForm = () => {
       formWrapperRef.current?.removeEventListener("keydown", trapFocus);
   }, []);
 
-  const onSubmit: SubmitHandler<SchemaFormType> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<SchemaFormType> = async (data) => {
+    const base64Image = await fileToBase64(data.picture);
+    const newData = { ...data, picture: base64Image };
+    dispatch(addCurrentState(newData));
+    dispatch(addToDb());
+    reset();
   };
 
   console.log({ errors, isValid });
@@ -219,14 +229,14 @@ export const ControlledForm = () => {
             control={control}
             render={({ field }) => (
               <select className="input-text w-full" {...field}>
-                {countryList.map((country) => (
+                {countriesList.map((country) => (
                   <option value={country} key={country}>
                     {country}
                   </option>
                 ))}
               </select>
             )}
-            defaultValue={countryList[0]}
+            defaultValue={countriesList[0]}
           />
         </label>
         {errors.country && (

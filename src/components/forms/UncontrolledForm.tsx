@@ -1,9 +1,10 @@
 import { useEffect, useRef } from "react";
-import { countryList } from "../../constant/countries";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { SchemaFormType } from "../../models/types/schemaForm";
 import { SchemaForm } from "../../schema/schemaForm";
+import { useSelector } from "react-redux";
+import { selectCountries } from "../../store/countrySlice";
 
 export const UncontrolledForm = () => {
   const {
@@ -14,6 +15,7 @@ export const UncontrolledForm = () => {
     resolver: zodResolver(SchemaForm),
   });
   const formWrapperRef = useRef<HTMLDivElement>(null);
+  const countriesList = useSelector(selectCountries);
 
   useEffect(() => {
     if (formWrapperRef.current === null) return;
@@ -186,7 +188,7 @@ export const UncontrolledForm = () => {
             className="input-text w-full"
             aria-required="true"
           >
-            {countryList.map((country) => (
+            {countriesList.map((country) => (
               <option value={country} key={country}>
                 {country}
               </option>

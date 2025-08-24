@@ -22,27 +22,16 @@ export const SchemaForm = z
       .boolean()
       .refine((val) => val === true, "You need to agree with it!"),
     picture: z
-      .any()
-      .refine(
-        (val) => {
-          console.log({ val });
-          if (!val || !(val instanceof FileList)) return false;
-          return val.length > 0;
-        },
-        {
-          message: "Load image file (png/jpeg)",
-        },
-      )
-      .transform((val) => (val instanceof FileList ? val[0] : val))
-      .refine((file) => file && file.size <= 1_000_000, {
+      .custom<FileList>((val) => val instanceof FileList && val.length > 0, {
+        message: "Load image file (png/jpeg)",
+      })
+      .transform((val) => val[0])
+      .refine((file) => file.size <= 1_000_000, {
         message: "Maximum size 1Mb",
       })
-      .refine(
-        (file) => file && ["image/png", "image/jpeg"].includes(file.type),
-        {
-          message: "Allow only 'png' and 'jpeg'",
-        },
-      ),
+      .refine((file) => ["image/png", "image/jpeg"].includes(file.type), {
+        message: "Allow only 'png' and 'jpeg'",
+      }),
     country: z.string("Please choose one option."),
   })
   .superRefine((data, ctx) => {

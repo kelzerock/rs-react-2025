@@ -1,5 +1,5 @@
 import { useState, type JSX } from "react";
-import { ControlledForm } from "../../components/forms/ControlledForm copy";
+import { ControlledForm } from "../../components/forms/ControlledForm";
 import { UncontrolledForm } from "../../components/forms/UncontrolledForm";
 import { Modal } from "../../components/Modal";
 

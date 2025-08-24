@@ -19,6 +19,7 @@ describe("fileToBase64", () => {
       error: null,
     };
 
+    // @ts-expect-error - mock FileReader for tests
     global.FileReader = vi.fn().mockImplementation(() => mockFileReader);
   });
 

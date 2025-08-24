@@ -31,8 +31,12 @@ export const formUncontrolledSlice = createSlice({
       return { ...state, current: { ...action.payload } };
     },
     addToDbUncontrolledForm: (state) => {
+      const newCard = {
+        ...state.current,
+        id: Date.now().toString(),
+      };
       return {
-        db: [...state.db, state.current],
+        db: [newCard, ...state.db],
         current: { ...initialCurrentForm },
       };
     },

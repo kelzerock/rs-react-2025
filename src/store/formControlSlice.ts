@@ -28,8 +28,12 @@ export const formControlSlice = createSlice({
       return { ...state, current: { ...action.payload } };
     },
     addToDb: (state) => {
+      const newCard = {
+        ...state.current,
+        id: Date.now().toString(),
+      };
       return {
-        db: [...state.db, state.current],
+        db: [newCard, ...state.db],
         current: { ...initialCurrentForm },
       };
     },

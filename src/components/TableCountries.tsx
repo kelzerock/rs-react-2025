@@ -34,12 +34,26 @@ const TableCountries = () => {
     cement_co2_per_capita: false,
     gas_co2: false,
   });
-  const [year, setYear] = useState(2023);
+  const [year, setYear] = useState({
+    choice: 2023,
+    dateTime: new Date().getTime(),
+  });
+  const [highlightedRows, setHighlightedRows] = useState<boolean>(false);
   const years = useSelector(selectYears);
+  const countries = useSelector(selectCountries);
 
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
-  const countries = useSelector(selectCountries);
+  const handleChangeYear = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newYear = Number(e.target.value);
+    setYear({ choice: newYear, dateTime: new Date().getTime() });
+
+    setHighlightedRows(true);
+
+    setTimeout(() => {
+      setHighlightedRows(false);
+    }, 1000);
+  };
 
   if (!countries) {
     return <CountriesDataLoader />;
@@ -72,10 +86,7 @@ const TableCountries = () => {
           <span className="col-span-1">
             <label htmlFor="year" className="flex gap-1">
               Year
-              <select
-                value={year}
-                onChange={(e) => setYear(Number(e.target.value))}
-              >
+              <select value={year.choice} onChange={handleChangeYear}>
                 {years.map((year) => (
                   <option value={year} key={year}>
                     {year}
@@ -99,13 +110,17 @@ const TableCountries = () => {
         </div>
         {countries &&
           Object.entries(countries).map(([country, infoCountry]) => (
-            <CountryRow
-              country={country}
-              infoCountry={infoCountry}
-              year={year}
+            <div
               key={country}
-              moreInfoSet={moreInfoSet}
-            />
+              className={`${highlightedRows ? "bg-emerald-200" : ""} transition-colors duration-300`}
+            >
+              <CountryRow
+                country={country}
+                infoCountry={infoCountry}
+                year={year.choice}
+                moreInfoSet={moreInfoSet}
+              />
+            </div>
           ))}
       </div>
     </>

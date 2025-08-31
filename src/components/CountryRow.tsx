@@ -25,7 +25,10 @@ export const CountryRow = ({
 
   return (
     <div
-      className={`col-span-full grid grid-cols-6 ${additionalCols > 0 ? `grid-cols-${6 + additionalCols}` : ""}`}
+      className={`col-span-full grid dark:text-white`}
+      style={{
+        gridTemplateColumns: `repeat(${6 + additionalCols}, minmax(0, 1fr))`,
+      }}
       key={country}
     >
       <span className="col-span-1">{country}</span>
@@ -53,7 +56,8 @@ export const CountryRow = ({
           ([key, value]) =>
             value && (
               <span className="col-span-1" key={key}>
-                {selectedYearData
+                {selectedYearData &&
+                selectedYearData[key as keyof typeof selectedYearData]
                   ? selectedYearData[key as keyof typeof selectedYearData]
                   : "N/A"}
               </span>

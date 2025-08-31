@@ -58,7 +58,7 @@ const TableCountries = () => {
     countries,
   );
   const countriesName = useSelector(selectCountriesName);
-  console.log({ countriesName });
+  console.log({ countries });
 
   useEffect(() => {
     if (countries && countriesName.length === 0) {
@@ -181,10 +181,13 @@ const TableCountries = () => {
       </div>
       <div className="flex flex-col gap-1 w-full">
         <div
-          className={`grid grid-cols-${Math.min(6 + additionalCols, 16)} border-b border-stone-400 sticky top-0 bg-stone-300`}
+          className={`grid border-b border-stone-400 sticky top-0 bg-stone-300`}
+          style={{
+            gridTemplateColumns: `repeat(${6 + additionalCols}, minmax(0, 1fr))`,
+          }}
         >
           <div className="col-span-1 flex flex-col gap-1 items-center p-0.5">
-            <label htmlFor="countries-name">Country</label>
+            <label htmlFor="countries-name-input">Country</label>
             <SortingPanel
               handleClickSortButton={handleClickSortButton}
               title="country"
@@ -195,12 +198,12 @@ const TableCountries = () => {
             <input
               className="w-full border border-stone-400 rounded-md p-1 focus:outline-none"
               type="text"
-              list="countries-name"
-              id="countries-name"
+              list="countries-name-datalist"
+              id="countries-name-input"
               value={countryChoice}
               onChange={(e) => handleSearchCountry(e)}
             />
-            <datalist id="countries-name">
+            <datalist id="countries-name-datalist">
               {countriesName.map((country) => (
                 <option value={country} key={country}>
                   {country}

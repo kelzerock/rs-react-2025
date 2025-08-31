@@ -1,7 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
+import countriesReducer from "./countriesSlice";
 
 export const store = configureStore({
-  reducer: {},
+  reducer: { countries: countriesReducer },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -14,6 +14,9 @@ body {
 .btn-form-open {
   @apply bg-stone-700 text-stone-100 p-3 rounded-md font-semibold hover:bg-stone-800 hover:cursor-pointer transition-colors duration-300 dark:hover:bg-stone-500 disabled:bg-zinc-300 disabled:text-zinc-400;
 }
+.btn-arrow {
+  @apply bg-stone-400 text-stone-100 rounded-sm font-semibold hover:bg-stone-800 hover:cursor-pointer transition-colors duration-300 dark:hover:bg-stone-500 disabled:bg-zinc-300 disabled:text-zinc-400 h-7 w-7 flex items-center justify-center;
+}
 
 .label {
   @apply grid grid-cols-1 sm:grid-cols-3 gap-1.5 capitalize w-full bg-stone-200 p-1;

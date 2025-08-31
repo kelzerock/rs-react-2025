@@ -1,61 +1,93 @@
-import { useEffect } from "react";
+import { use, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addCountries, selectCountries } from "../store/countriesSlice";
+import type { Countries } from "../models/types/countries";
+import { CountryRow } from "./CountryRow";
+import { ModalMoreInfoSet } from "./ModalMoreInfoSet";
+
+let countriesPromise: Promise<Countries> | null = null;
+
+const fetchCountriesData = () => {
+  if (!countriesPromise) {
+    countriesPromise = fetch("data.json").then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch countries data");
+      }
+      return response.json();
+    });
+  }
+  return countriesPromise;
+};
+
+const CountriesDataLoader = () => {
+  const dispatch = useDispatch();
+  const data = use(fetchCountriesData());
+  dispatch(addCountries(data));
+  return null;
+};
 
 const TableCountries = () => {
-  const dispatch = useDispatch();
+  const [isOpen, setIsOpen] = useState(false);
+  const [moreInfoSet, setMoreInfoSet] = useState({
+    cement_co2: false,
+    cement_co2_per_capita: false,
+    gas_co2: false,
+  });
+  const handleOpen = () => setIsOpen(true);
+  const handleClose = () => setIsOpen(false);
   const countries = useSelector(selectCountries);
+
+  if (!countries) {
+    return <CountriesDataLoader />;
+  }
+
+  const additionalCols = Object.values(moreInfoSet).filter(Boolean).length;
+
   console.log({ countries });
-  useEffect(() => {
-    if (countries) return;
 
-    const fetchDataCo = async () => {
-      const response = await fetch(
-        "data.json",
-        // "https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.json"
-      );
-      if (!response.ok) {
-        console.log("fetch failed!");
-        return;
-      }
-      const data = await response.json();
-      dispatch(addCountries(data));
-    };
-
-    fetchDataCo();
-  }, [countries]);
   return (
     <>
       <div>TableCountries</div>
+      <div className="relative">
+        <button className="btn-form-open self-start" onClick={handleOpen}>
+          Add more data
+        </button>
+        <ModalMoreInfoSet
+          isOpen={isOpen}
+          close={handleClose}
+          moreInfoSet={moreInfoSet}
+          setMoreInfoSet={setMoreInfoSet}
+        />
+      </div>
       <div className="flex flex-col gap-1 w-full">
-        <div className="col-span-full grid grid-cols-6 ">
+        <div
+          className={`grid  ${additionalCols > 0 ? `grid-cols-${6 + additionalCols}` : "grid-cols-6"}`}
+        >
           <span className="col-span-1">Country</span>
           <span className="col-span-1">iso_code</span>
           <span className="col-span-1">year</span>
           <span className="col-span-1">population</span>
           <span className="col-span-1">co2</span>
           <span className="col-span-1">co2_per_capita</span>
+          {additionalCols > 0 &&
+            Object.entries(moreInfoSet).map(
+              ([key, value]) =>
+                value && (
+                  <span className="col-span-1" key={key}>
+                    {key}
+                  </span>
+                ),
+            )}
         </div>
         {countries &&
           Object.entries(countries).map(([country, infoCountry]) => (
-            <div className="col-span-full grid grid-cols-6 " key={country}>
-              <span className="col-span-1">{country}</span>
-              <span className="col-span-1">
-                {infoCountry.iso_code ?? "N/A"}
-              </span>
-              <span className="col-span-1">
-                {infoCountry.data[0].year ?? "N/A"}
-              </span>
-              <span className="col-span-1">
-                {infoCountry.data[0].population ?? "N/A"}
-              </span>
-              <span className="col-span-1">
-                {infoCountry.data[0].co2 ?? "N/A"}
-              </span>
-              <span className="col-span-1">
-                {infoCountry.data[0].co2_per_capita ?? "N/A"}
-              </span>
-            </div>
+            <CountryRow
+              country={country}
+              infoCountry={infoCountry}
+              year={2023}
+              key={country}
+              moreInfoSet={moreInfoSet}
+            />
           ))}
       </div>
     </>

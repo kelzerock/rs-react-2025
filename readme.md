@@ -1,69 +1,81 @@
-# React + TypeScript + Vite
+# Performance data
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Before optimization
 
-Currently, two official plugins are available:
+### Sorting a column
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Commit Duration: 3.8s
+- Render Duration: 346ms.
+- Interactions: User interactions that triggered the renders.
+- Flame Graph:
+  ![screenshot](./src/assets/image-1.png "Sorting column before optimization")
+- Ranked Chart: Sorted list of components by render duration.
+  ![screenshot](./src/assets/image-2.png "Sorting column before optimization")
 
-## Expanding the ESLint configuration
+### Searching a country
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Commit Duration: 3s
+- Render Duration: 76ms.
+- Interactions: User interactions that triggered the renders.
+- Flame Graph:
+  ![screenshot](./src/assets/image-3.png "Sorting column before optimization")
+- Ranked Chart: Sorted list of components by render duration.
+  ![screenshot](./src/assets/image-4.png "Sorting column before optimization")
 
-```js
-export default tseslint.config([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
+### Selecting another year
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- Commit Duration: 3.8s
+- Render Duration: 347ms.
+- Interactions: User interactions that triggered the renders.
+- Flame Graph:
+  ![screenshot](./src/assets/image-5.png "Sorting column before optimization")
+- Ranked Chart: Sorted list of components by render duration.
+  ![screenshot](./src/assets/image-6.png "Sorting column before optimization")
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+### Adding/removing columns
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Commit Duration: 1.4s
+- Render Duration: 354ms.
+- Interactions: User interactions that triggered the renders.
+- Flame Graph:
+  ![screenshot](./src/assets/image-7.png "Sorting column before optimization")
+- Ranked Chart: Sorted list of components by render duration.
+  ![screenshot](./src/assets/image-8.png "Sorting column before optimization")
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+## After optimization
 
-export default tseslint.config([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+### Sorting a column
+
+- Commit Duration: 2.2s
+- Render Duration: 364ms.
+- Flame Graph:
+  ![screenshot](./src/assets/image-1-1.png "Sorting column before optimization")
+- Ranked Chart: Sorted list of components by render duration.
+  ![screenshot](./src/assets/image-1-2.png "Sorting column before optimization")
+
+### Searching a country
+
+- Commit Duration: 2.3s
+- Render Duration: 265ms.
+- Flame Graph:
+  ![screenshot](./src/assets/image-1-3.png "Sorting column before optimization")
+- Ranked Chart: Sorted list of components by render duration.
+  ![screenshot](./src/assets/image-1-4.png "Sorting column before optimization")
+
+### Selecting another year
+
+- Commit Duration: 3.8s
+- Render Duration: 347ms.
+- Flame Graph:
+  ![screenshot](./src/assets/image-1-5.png "Sorting column before optimization")
+- Ranked Chart: Sorted list of components by render duration.
+  ![screenshot](./src/assets/image-1-6.png "Sorting column before optimization")
+
+### Adding/removing columns
+
+- Commit Duration: 1.4s
+- Render Duration: 382ms.
+- Flame Graph:
+  ![screenshot](./src/assets/image-1-7.png "Sorting column before optimization")
+- Ranked Chart: Sorted list of components by render duration.
+  ![screenshot](./src/assets/image-1-8.png "Sorting column before optimization")

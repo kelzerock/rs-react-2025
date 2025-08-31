@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useState, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addCountries, selectCountries } from "../store/countriesSlice";
 import type { Countries } from "../models/types/countries";
@@ -16,7 +16,9 @@ let countriesPromise: Promise<Countries> | null = null;
 
 const fetchCountriesData = () => {
   if (!countriesPromise) {
-    countriesPromise = fetch("data.json").then((response) => {
+    countriesPromise = fetch(
+      "https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.json",
+    ).then((response) => {
       if (!response.ok) {
         throw new Error("Failed to fetch countries data");
       }
@@ -58,7 +60,33 @@ const TableCountries = () => {
     countries,
   );
   const countriesName = useSelector(selectCountriesName);
-  console.log({ countries });
+
+  const additionalCols = useMemo(() => {
+    return Object.values(moreInfoSet).filter(Boolean).length;
+  }, [moreInfoSet]);
+
+  const gridTemplateColumns = useMemo(() => {
+    return {
+      gridTemplateColumns: `repeat(${6 + additionalCols}, minmax(0, 1fr))`,
+    };
+  }, [additionalCols]);
+
+  const filteredCountriesMemo = useMemo(() => {
+    if (!countries || countryChoice.trim() === "") {
+      return countries;
+    }
+
+    const searchValue = countryChoice.trim();
+    return Object.fromEntries(
+      Object.entries(countries).filter(([country]) =>
+        country.toLowerCase().includes(searchValue.toLowerCase()),
+      ),
+    );
+  }, [countries, countryChoice]);
+
+  const activeAdditionalCols = useMemo(() => {
+    return Object.entries(moreInfoSet).filter(([, value]) => value);
+  }, [moreInfoSet]);
 
   useEffect(() => {
     if (countries && countriesName.length === 0) {
@@ -71,99 +99,107 @@ const TableCountries = () => {
     setFilteredCountries(countries);
   }, [countries]);
 
-  const handleSearchCountry = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchValue = e.target.value.trim();
-    setCountryChoice(e.target.value);
+  useEffect(() => {
+    setFilteredCountries(filteredCountriesMemo);
+  }, [filteredCountriesMemo]);
 
-    if (searchValue === "") {
-      setFilteredCountries(countries);
-      return;
-    }
+  const handleSearchCountry = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setCountryChoice(e.target.value);
+    },
+    [],
+  );
 
-    const filtered = Object.fromEntries(
-      Object.entries(countries ?? {}).filter(([country]) =>
-        country.toLowerCase().includes(searchValue.toLowerCase()),
-      ),
-    );
-    setFilteredCountries(filtered);
-  };
+  const handleOpen = useCallback(() => setIsOpen(true), []);
+  const handleClose = useCallback(() => setIsOpen(false), []);
 
-  const handleOpen = () => setIsOpen(true);
-  const handleClose = () => setIsOpen(false);
-  const handleChangeYear = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newYear = Number(e.target.value);
-    setYear({ choice: newYear, dateTime: new Date().getTime() });
+  const handleChangeYear = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const newYear = Number(e.target.value);
+      setYear({ choice: newYear, dateTime: new Date().getTime() });
 
-    setHighlightedRows(true);
+      setHighlightedRows(true);
 
-    setTimeout(() => {
-      setHighlightedRows(false);
-    }, 1000);
-  };
+      setTimeout(() => {
+        setHighlightedRows(false);
+      }, 1000);
+    },
+    [],
+  );
+
+  const handleClickSortButton = useCallback(
+    (
+      target: string,
+      direction: "asc" | "desc",
+      typeData: "number" | "string",
+    ) => {
+      if (!filteredCountries) return;
+
+      const sortedCountries = Object.entries(filteredCountries).sort((a, b) => {
+        if (target === "country") {
+          const aValue = a[0];
+          const bValue = b[0];
+          return direction === "asc"
+            ? aValue.localeCompare(bValue)
+            : bValue.localeCompare(aValue);
+        }
+
+        if (target === "iso_code") {
+          const aValue = a[1]?.iso_code ?? "";
+          const bValue = b[1]?.iso_code ?? "";
+          return direction === "asc"
+            ? aValue.localeCompare(bValue)
+            : bValue.localeCompare(aValue);
+        }
+
+        const getValue = (
+          countryData: Country,
+          typeData: "number" | "string",
+        ) => {
+          const data = countryData?.data?.find((d) => d?.year === year.choice);
+          if (!data) return typeData === "number" ? 0 : "";
+          return (
+            data[target as keyof typeof data] ??
+            (typeData === "number" ? 0 : "")
+          );
+        };
+
+        const aValue = getValue(a[1], typeData);
+        const bValue = getValue(b[1], typeData);
+
+        if (
+          typeData === "number" &&
+          typeof aValue === "number" &&
+          typeof bValue === "number"
+        ) {
+          return direction === "asc" ? aValue - bValue : bValue - aValue;
+        }
+        if (
+          typeData === "string" &&
+          typeof aValue === "string" &&
+          typeof bValue === "string"
+        ) {
+          return direction === "asc"
+            ? aValue.localeCompare(bValue)
+            : bValue.localeCompare(aValue);
+        }
+        return 0;
+      });
+      setFilteredCountries(Object.fromEntries(sortedCountries));
+    },
+    [filteredCountries, year.choice],
+  );
+
+  const handleSetSortingPanelTitle = useCallback(
+    (value: { title: string; direction: "asc" | "desc" }) => {
+      setSortingPanelTitle(value);
+    },
+    [],
+  );
 
   if (!countries) {
     return <CountriesDataLoader />;
   }
-
-  const additionalCols = Object.values(moreInfoSet).filter(Boolean).length;
-
-  const handleClickSortButton = (
-    target: string,
-    direction: "asc" | "desc",
-    typeData: "number" | "string",
-  ) => {
-    if (!filteredCountries) return;
-    const sortedCountries = Object.entries(filteredCountries).sort((a, b) => {
-      if (target === "country") {
-        const aValue = a[0];
-        const bValue = b[0];
-        return direction === "asc"
-          ? aValue.localeCompare(bValue)
-          : bValue.localeCompare(aValue);
-      }
-
-      if (target === "iso_code") {
-        const aValue = a[1]?.iso_code ?? "";
-        const bValue = b[1]?.iso_code ?? "";
-        return direction === "asc"
-          ? aValue.localeCompare(bValue)
-          : bValue.localeCompare(aValue);
-      }
-
-      const getValue = (
-        countryData: Country,
-        typeData: "number" | "string",
-      ) => {
-        const data = countryData?.data?.find((d) => d?.year === year.choice);
-        if (!data) return typeData === "number" ? 0 : "";
-        return (
-          data[target as keyof typeof data] ?? (typeData === "number" ? 0 : "")
-        );
-      };
-
-      const aValue = getValue(a[1], typeData);
-      const bValue = getValue(b[1], typeData);
-
-      if (
-        typeData === "number" &&
-        typeof aValue === "number" &&
-        typeof bValue === "number"
-      ) {
-        return direction === "asc" ? aValue - bValue : bValue - aValue;
-      }
-      if (
-        typeData === "string" &&
-        typeof aValue === "string" &&
-        typeof bValue === "string"
-      ) {
-        return direction === "asc"
-          ? aValue.localeCompare(bValue)
-          : bValue.localeCompare(aValue);
-      }
-      return 0;
-    });
-    setFilteredCountries(Object.fromEntries(sortedCountries));
-  };
 
   return (
     <>
@@ -182,9 +218,7 @@ const TableCountries = () => {
       <div className="flex flex-col gap-1 w-full">
         <div
           className={`grid border-b border-stone-400 sticky top-0 bg-stone-300`}
-          style={{
-            gridTemplateColumns: `repeat(${6 + additionalCols}, minmax(0, 1fr))`,
-          }}
+          style={gridTemplateColumns}
         >
           <div className="col-span-1 flex flex-col gap-1 items-center p-0.5">
             <label htmlFor="countries-name-input">Country</label>
@@ -193,7 +227,7 @@ const TableCountries = () => {
               title="country"
               typeData="string"
               sortingPanelTitle={sortingPanelTitle}
-              setSortingPanelTitle={(value) => setSortingPanelTitle(value)}
+              setSortingPanelTitle={handleSetSortingPanelTitle}
             />
             <input
               className="w-full border border-stone-400 rounded-md p-1 focus:outline-none"
@@ -201,7 +235,7 @@ const TableCountries = () => {
               list="countries-name-datalist"
               id="countries-name-input"
               value={countryChoice}
-              onChange={(e) => handleSearchCountry(e)}
+              onChange={handleSearchCountry}
             />
             <datalist id="countries-name-datalist">
               {countriesName.map((country) => (
@@ -218,7 +252,7 @@ const TableCountries = () => {
               title="iso_code"
               typeData="string"
               sortingPanelTitle={sortingPanelTitle}
-              setSortingPanelTitle={(value) => setSortingPanelTitle(value)}
+              setSortingPanelTitle={handleSetSortingPanelTitle}
             />
           </div>
           <div className="col-span-1">
@@ -240,7 +274,7 @@ const TableCountries = () => {
               title="population"
               typeData="number"
               sortingPanelTitle={sortingPanelTitle}
-              setSortingPanelTitle={(value) => setSortingPanelTitle(value)}
+              setSortingPanelTitle={handleSetSortingPanelTitle}
             />
           </div>
           <div className="col-span-1">
@@ -250,7 +284,7 @@ const TableCountries = () => {
               title="co2"
               typeData="number"
               sortingPanelTitle={sortingPanelTitle}
-              setSortingPanelTitle={(value) => setSortingPanelTitle(value)}
+              setSortingPanelTitle={handleSetSortingPanelTitle}
             />
           </div>
           <div className="col-span-1">
@@ -260,11 +294,11 @@ const TableCountries = () => {
               title="co2_per_capita"
               typeData="number"
               sortingPanelTitle={sortingPanelTitle}
-              setSortingPanelTitle={(value) => setSortingPanelTitle(value)}
+              setSortingPanelTitle={handleSetSortingPanelTitle}
             />
           </div>
           {additionalCols > 0 &&
-            Object.entries(moreInfoSet).map(
+            activeAdditionalCols.map(
               ([key, value]) =>
                 value && (
                   <div className="col-span-1" key={key}>
@@ -274,9 +308,7 @@ const TableCountries = () => {
                       title={key}
                       typeData="number"
                       sortingPanelTitle={sortingPanelTitle}
-                      setSortingPanelTitle={(value) =>
-                        setSortingPanelTitle(value)
-                      }
+                      setSortingPanelTitle={handleSetSortingPanelTitle}
                     />
                   </div>
                 ),

@@ -1,11 +1,33 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 const TableCountries = lazy(() => import("../../components/TableCountries"));
 
-const Loading = () => (
-  <div className="w-full h-full flex items-center justify-center">
-    <div className="text-xl">Loading countries data...</div>
-  </div>
-);
+const Loading = () => {
+  const [additionalDots, setAdditionalDots] = useState("");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAdditionalDots((prev) => {
+        if (prev.length > 4) {
+          return "";
+        } else {
+          return prev + ".";
+        }
+      });
+    }, 500);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="w-full h-full flex items-center justify-center">
+      <span className="text-xl relative dark:text-white">
+        Loading countries data
+        <span className="absolute left-1/1 top-1/2 -translate-y-1/2">
+          {additionalDots}
+        </span>
+      </span>
+    </div>
+  );
+};
 
 export const HomePage = () => {
   return (

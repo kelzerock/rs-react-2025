@@ -17,7 +17,8 @@ let countriesPromise: Promise<Countries> | null = null;
 const fetchCountriesData = () => {
   if (!countriesPromise) {
     countriesPromise = fetch(
-      "https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.json",
+      // "https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.json",
+      "data.json",
     ).then((response) => {
       if (!response.ok) {
         throw new Error("Failed to fetch countries data");
@@ -221,14 +222,16 @@ const TableCountries = () => {
           style={gridTemplateColumns}
         >
           <div className="col-span-1 flex flex-col gap-1 items-center p-0.5">
-            <label htmlFor="countries-name-input">Country</label>
-            <SortingPanel
-              handleClickSortButton={handleClickSortButton}
-              title="country"
-              typeData="string"
-              sortingPanelTitle={sortingPanelTitle}
-              setSortingPanelTitle={handleSetSortingPanelTitle}
-            />
+            <div className="flex gap-1 items-center justify-evenly">
+              <label htmlFor="countries-name-input">Country</label>
+              <SortingPanel
+                handleClickSortButton={handleClickSortButton}
+                title="country"
+                typeData="string"
+                sortingPanelTitle={sortingPanelTitle}
+                setSortingPanelTitle={handleSetSortingPanelTitle}
+              />
+            </div>
             <input
               className="w-full border border-stone-400 rounded-md p-1 focus:outline-none"
               type="text"
@@ -245,7 +248,7 @@ const TableCountries = () => {
               ))}
             </datalist>
           </div>
-          <div className="col-span-1">
+          <div className="col-span-1 flex gap-1 items-center justify-evenly">
             iso_code
             <SortingPanel
               handleClickSortButton={handleClickSortButton}
@@ -255,7 +258,7 @@ const TableCountries = () => {
               setSortingPanelTitle={handleSetSortingPanelTitle}
             />
           </div>
-          <div className="col-span-1">
+          <div className="col-span-1 flex gap-1 items-center justify-evenly">
             <label htmlFor="year" className="flex gap-1">
               Year
               <select value={year.choice} onChange={handleChangeYear}>
@@ -267,7 +270,7 @@ const TableCountries = () => {
               </select>
             </label>
           </div>
-          <div className="col-span-1 flex gap-1 items-center">
+          <div className="col-span-1 flex gap-1 items-center justify-evenly">
             population
             <SortingPanel
               handleClickSortButton={handleClickSortButton}
@@ -277,7 +280,7 @@ const TableCountries = () => {
               setSortingPanelTitle={handleSetSortingPanelTitle}
             />
           </div>
-          <div className="col-span-1">
+          <div className="col-span-1 flex gap-1 items-center justify-evenly">
             co2
             <SortingPanel
               handleClickSortButton={handleClickSortButton}
@@ -287,7 +290,7 @@ const TableCountries = () => {
               setSortingPanelTitle={handleSetSortingPanelTitle}
             />
           </div>
-          <div className="col-span-1">
+          <div className="col-span-1 flex gap-1 items-center justify-evenly">
             co2_per_capita
             <SortingPanel
               handleClickSortButton={handleClickSortButton}
@@ -301,7 +304,10 @@ const TableCountries = () => {
             activeAdditionalCols.map(
               ([key, value]) =>
                 value && (
-                  <div className="col-span-1" key={key}>
+                  <div
+                    className="col-span-1 flex gap-1 items-center justify-evenly"
+                    key={key}
+                  >
                     {key}
                     <SortingPanel
                       handleClickSortButton={handleClickSortButton}

@@ -18,7 +18,7 @@ export const CountryRow = ({
 }) => {
   const [infoCountryData] = useState(infoCountry);
   const selectedYearData = infoCountryData.data?.find(
-    (data) => data.year === year,
+    (data) => data?.year === year,
   );
 
   const additionalCols = Object.values(moreInfoSet).filter(Boolean).length;
@@ -38,17 +38,17 @@ export const CountryRow = ({
       </span>
       <span className="col-span-1">
         {selectedYearData && selectedYearData.population
-          ? selectedYearData.population
+          ? selectedYearData.population.toFixed(0)
           : "N/A"}
       </span>
       <span className="col-span-1">
         {selectedYearData && selectedYearData.co2
-          ? selectedYearData.co2
+          ? selectedYearData.co2.toFixed(4)
           : "N/A"}
       </span>
       <span className="col-span-1">
         {selectedYearData && selectedYearData.co2_per_capita
-          ? selectedYearData.co2_per_capita
+          ? selectedYearData.co2_per_capita.toFixed(4)
           : "N/A"}
       </span>
       {additionalCols > 0 &&
@@ -58,7 +58,9 @@ export const CountryRow = ({
               <span className="col-span-1" key={key}>
                 {selectedYearData &&
                 selectedYearData[key as keyof typeof selectedYearData]
-                  ? selectedYearData[key as keyof typeof selectedYearData]
+                  ? selectedYearData[
+                      key as keyof typeof selectedYearData
+                    ]?.toFixed(4)
                   : "N/A"}
               </span>
             ),

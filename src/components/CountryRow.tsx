@@ -34,13 +34,19 @@ export const CountryRow = ({
         {selectedYearData ? selectedYearData.year : "N/A"}
       </span>
       <span className="col-span-1">
-        {selectedYearData ? selectedYearData.population : "N/A"}
+        {selectedYearData && selectedYearData.population
+          ? selectedYearData.population
+          : "N/A"}
       </span>
       <span className="col-span-1">
-        {selectedYearData ? selectedYearData.co2 : "N/A"}
+        {selectedYearData && selectedYearData.co2
+          ? selectedYearData.co2
+          : "N/A"}
       </span>
       <span className="col-span-1">
-        {selectedYearData ? selectedYearData.co2_per_capita : "N/A"}
+        {selectedYearData && selectedYearData.co2_per_capita
+          ? selectedYearData.co2_per_capita
+          : "N/A"}
       </span>
       {additionalCols > 0 &&
         Object.entries(moreInfoSet).map(

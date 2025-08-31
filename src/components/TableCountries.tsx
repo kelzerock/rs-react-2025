@@ -17,8 +17,7 @@ let countriesPromise: Promise<Countries> | null = null;
 const fetchCountriesData = () => {
   if (!countriesPromise) {
     countriesPromise = fetch(
-      // "https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.json",
-      "data.json",
+      "https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.json",
     ).then((response) => {
       if (!response.ok) {
         throw new Error("Failed to fetch countries data");

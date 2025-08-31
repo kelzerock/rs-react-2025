@@ -59,9 +59,9 @@ const TableCountries = () => {
           setMoreInfoSet={setMoreInfoSet}
         />
       </div>
-      <div className="flex flex-col gap-1 w-full">
+      <div className="flex flex-col gap-1 w-full overflow-x-hidden">
         <div
-          className={`grid  ${additionalCols > 0 ? `grid-cols-${6 + additionalCols}` : "grid-cols-6"}`}
+          className={`grid grid-cols-${Math.min(6 + additionalCols, 16)} border-b border-stone-400`}
         >
           <span className="col-span-1">Country</span>
           <span className="col-span-1">iso_code</span>

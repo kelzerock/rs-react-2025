@@ -4,6 +4,7 @@ import { addCountries, selectCountries } from "../store/countriesSlice";
 import type { Countries } from "../models/types/countries";
 import { CountryRow } from "./CountryRow";
 import { ModalMoreInfoSet } from "./ModalMoreInfoSet";
+import { selectYears } from "../store/yearsSlice";
 
 let countriesPromise: Promise<Countries> | null = null;
 
@@ -33,6 +34,9 @@ const TableCountries = () => {
     cement_co2_per_capita: false,
     gas_co2: false,
   });
+  const [year, setYear] = useState(2023);
+  const years = useSelector(selectYears);
+
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
   const countries = useSelector(selectCountries);
@@ -65,7 +69,21 @@ const TableCountries = () => {
         >
           <span className="col-span-1">Country</span>
           <span className="col-span-1">iso_code</span>
-          <span className="col-span-1">year</span>
+          <span className="col-span-1">
+            <label htmlFor="year" className="flex gap-1">
+              Year
+              <select
+                value={year}
+                onChange={(e) => setYear(Number(e.target.value))}
+              >
+                {years.map((year) => (
+                  <option value={year} key={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </span>
           <span className="col-span-1">population</span>
           <span className="col-span-1">co2</span>
           <span className="col-span-1">co2_per_capita</span>
@@ -84,7 +102,7 @@ const TableCountries = () => {
             <CountryRow
               country={country}
               infoCountry={infoCountry}
-              year={2023}
+              year={year}
               key={country}
               moreInfoSet={moreInfoSet}
             />
